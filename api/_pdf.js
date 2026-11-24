@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { PDFDocument, rgb, degrees, pushGraphicsState, popGraphicsState, moveTo, lineTo, closePath, clip, endPath, appendBezierCurve } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 import { MODULES, ERREURS } from "./_manuel-data.js";
+import { OUTILS } from "./_outils.js";
 import { QUESTIONS } from "./_quiz-data.js";
 import { LOGO_PNG, LOGO_BLANC } from "./_logo.js";
 
@@ -554,7 +555,8 @@ export async function genererPdf(d) {
       titreSection(`${mi}.${si + 1}`, s.titre);
       if (s.illus === "synthese") { synthese(); return; }
       (s.texte || []).forEach((t) => para(t));
-      if (s.illus) illustration(s.illus);
+      if (s.illus === "outils") outils();
+      else if (s.illus) illustration(s.illus);
       if (s.exemple) encadre("exemple", s.exemple);
       if (s.astuce) encadre("astuce", s.astuce);
       if (s.retenir) encadre("retenir", s.retenir);
@@ -563,6 +565,36 @@ export async function genererPdf(d) {
     if (m.atelier === "QUIZ") blocQuiz();
     else if (m.atelier) blocAtelier(m.atelier);
   });
+
+  function outils() {
+    const cols = [C.lagon, C.vert, C.ocre, C.corail, C.lagon2, hx("#8C3B5E"), C.soft];
+    OUTILS.forEach((c, ci) => {
+      const col = cols[ci % cols.length];
+      place(70);
+      y -= 4;
+      rr(page, M, y - 26, CW, 26, 7, { color: col });
+      tx(page, c.cat, M + 12, y - 17.5, 11.5, F.bold, C.blanc);
+      tx(page, c.quand.toUpperCase(), M + CW - 12, y - 17, 7.5, F.bold, C.blanc, "r");
+      y -= 32;
+      c.items.forEach((o, k) => {
+        const U = wrap(o.usage, F.reg, 9.3, CW - 200), pro = o.tag.includes("Pro");
+        let pxx = M + 28 + Math.max(wid(o.nom, F.bold, 10), wid(o.url, F.semi, 8)) + 8, pyy = y - 17;
+        const dessous = pxx + wid(o.tag, F.bold, 6.8) + 10 > M + 184;
+        if (dessous) { pxx = M + 28; pyy = y - 40; }
+        const h = Math.max(dessous ? 46 : 30, 18 + U.length * 12.5);
+        place(h + 2);
+        if (k % 2 === 0) page.drawRectangle({ x: M, y: y - h, width: CW, height: h, color: C.sable });
+        page.drawCircle({ x: M + 14, y: y - 13, size: 8, color: col });
+        tx(page, o.nom.charAt(0).toUpperCase(), M + 14, y - 16.5, 9, F.bold, C.blanc, "c");
+        tx(page, o.nom, M + 28, y - 12, 10, F.bold, C.ink);
+        tx(page, o.url, M + 28, y - 24, 8, F.semi, C.lagon);
+        pastille(page, o.tag, pxx, pyy, 6.8, F.bold, pro ? C.ocreClair : C.vertClair, pro ? C.ocreInk : C.vert, 5);
+        U.forEach((l, i) => tx(page, l, M + 190, y - 12 - i * 12.5, 9.3, F.reg, C.soft));
+        y -= h + 2;
+      });
+      y -= 10;
+    });
+  }
 
   function synthese() {
     const items = [

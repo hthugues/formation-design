@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boîte à outils - Identité visuelle &amp; Marketing digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  :root { --lagon:#0F4C5C; --lagon-deep:#0A3642; --lagon-soft:#C9DCE0; --ocre:#E3A23B; --ocre-ink:#8A5D0E; --sable:#FAF7F2; --gres:#E4DED3; --ink:#2B2D2F; --soft:#5A5F62; --ok:#2E7D4F; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--sable); color: var(--ink); font-family: Inter, Arial, sans-serif; font-size: 16px; line-height: 1.45; }
+  h1, h2, h3 { font-family: "Playfair Display", Georgia, serif; color: var(--lagon); margin: 0; }
+  a { color: inherit; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 18px 16px 60px; }
+  .back { display: inline-block; color: var(--lagon); font-weight: 700; text-decoration: none; font-size: 15px; margin-bottom: 14px; background: #fff; border: 2px solid var(--lagon-soft); border-radius: 30px; padding: 7px 16px; }
+  .hero { background: var(--lagon); color: #fff; border-radius: 18px; padding: 24px 22px; position: relative; overflow: hidden; margin-bottom: 22px; }
+  .hero::after { content: ""; position: absolute; right: -40px; top: -40px; width: 160px; height: 160px; border-radius: 50%; background: var(--ocre); }
+  .hero > * { position: relative; z-index: 1; }
+  .eyebrow { font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--ocre); }
+  .hero h1 { color: #fff; font-size: 34px; margin-top: 6px; }
+  .hero p { margin: 8px 0 0; color: #D6E8EC; max-width: 560px; }
+  .legende { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; font-size: 13px; }
+  .tag { display: inline-block; border-radius: 20px; padding: 2px 10px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .tag.g { background: #DFF0E5; color: var(--ok); }
+  .tag.p { background: #F6E7CB; color: var(--ocre-ink); }
+  .cat { background: #fff; border: 1.5px solid var(--gres); border-top: 5px solid var(--lagon); border-radius: 14px; padding: 16px 16px 6px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(15,76,92,.07); }
+  .cat-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--gres); padding-bottom: 8px; margin-bottom: 4px; }
+  .cat-head h2 { font-size: 22px; }
+  .quand { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ocre-ink); white-space: nowrap; }
+  .outil { display: grid; grid-template-columns: 44px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid #F0ECE4; text-decoration: none; color: inherit; }
+  .outil:last-child { border-bottom: none; }
+  .ini { width: 44px; height: 44px; border-radius: 12px; background: var(--lagon); color: #fff; display: flex; align-items: center; justify-content: center; font-family: "Playfair Display", Georgia, serif; font-weight: 700; font-size: 20px; }
+  .l1 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .nom { font-weight: 700; font-size: 17px; color: var(--lagon-deep); }
+  .url { font-size: 13px; color: var(--lagon); font-weight: 600; }
+  .usage { margin: 3px 0 0; color: var(--soft); font-size: 14.5px; }
+  .ouvrir { font-size: 13px; font-weight: 700; color: var(--ocre-ink); margin-top: 4px; display: inline-block; }
+  .qr-box { display: none; }
+  /* Projection dans la présentation */
+  body.proj .wrap { max-width: none; width: 1280px; padding: 18px 28px; margin: 0 auto; }
+  body.proj .back, body.proj .usage, body.proj .ouvrir { display: none; }
+  body.proj .hero { display: grid; grid-template-columns: 1fr 110px; align-items: center; gap: 20px; padding: 14px 22px; margin-bottom: 12px; }
+  body.proj .hero p { margin-top: 4px; font-size: 15px; max-width: 760px; }
+  body.proj .legende { margin-top: 8px; }
+  body.proj .hero::after { right: 120px; }
+  body.proj .hero h1 { font-size: 32px; margin-top: 2px; }
+  body.proj .qr-box { display: block; background: #fff; border-radius: 12px; padding: 8px; text-align: center; }
+  body.proj .qr-box svg { width: 92px; height: 92px; display: block; margin: 0 auto; }
+  body.proj .qr-box span { font-size: 9px; line-height: 1.2; display: block; font-weight: 700; color: var(--lagon); }
+  body.proj .grille { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .astuce-c { display: none; }
+  body.proj .astuce-c { display: block; background: var(--ocre); border-radius: 14px; padding: 14px 16px; color: var(--lagon-deep); }
+  body.proj .astuce-c b { font-family: "Playfair Display", Georgia, serif; font-size: 19px; display: block; margin-bottom: 4px; }
+  body.proj .astuce-c p { margin: 0; font-size: 14px; }
+  body.proj .cat { margin: 0; padding: 10px 12px 2px; }
+  body.proj .cat-head { padding-bottom: 5px; }
+  body.proj .cat-head h2 { font-size: 17px; white-space: nowrap; }
+  body.proj .quand { font-size: 10px; }
+  body.proj .outil { grid-template-columns: 28px 1fr; gap: 8px; padding: 5px 0; }
+  body.proj .l1 { gap: 6px; }
+  body.proj .url { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  body.proj .ini { width: 28px; height: 28px; font-size: 14px; border-radius: 8px; }
+  body.proj .nom { font-size: 14px; }
+  body.proj .url { font-size: 11.5px; }
+  body.proj .tag { font-size: 10.5px; padding: 1px 8px; }
+  .outil:hover .nom { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="/ateliers">← Tous les ateliers</a>
+  <div class="hero">
+    <div>
+      <div class="eyebrow">B-Lossom Center · Boîte à outils</div>
+      <h1>Les outils pratiques</h1>
+      <p>Des outils gratuits ou presque, classés par étape, pour créer votre charte, vos visuels et vos publications avec un téléphone.</p>
+      <div class="legende"><span class="tag g">Gratuit</span><span class="tag p">Gratuit + Pro : la base est gratuite, des options sont payantes</span></div>
+    </div>
+    <div class="qr-box" id="qr"><span>Scannez-moi</span></div>
+  </div>
+  <div class="grille" id="grille"></div>
+</div>
+<script src="/ateliers/qrcode.js"></script>
+<script>
+var OUTILS = [
+  { cat: "Couleurs", quand: "Module 2 · charte", items: [
+    { nom: "Coolors", url: "coolors.co", tag: "Gratuit + Pro", usage: "Générer une palette en appuyant sur la barre d'espace, verrouiller la couleur que l'on garde, copier les codes HEX." },
+    { nom: "Color Hunt", url: "colorhunt.co", tag: "Gratuit", usage: "Des milliers de palettes de 4 couleurs toutes prêtes, classées par ambiance : chaude, pastel, nature..." },
+    { nom: "Adobe Color", url: "color.adobe.com", tag: "Gratuit", usage: "Le cercle chromatique en ligne : couleurs voisines, opposées, et extraction d'une palette depuis une photo." },
+    { nom: "WebAIM Contrast Checker", url: "webaim.org/resources/contrastchecker", tag: "Gratuit", usage: "Vérifier qu'un texte reste lisible sur sa couleur de fond." }
+  ] },
+  { cat: "Polices", quand: "Module 2 · charte", items: [
+    { nom: "Google Fonts", url: "fonts.google.com", tag: "Gratuit", usage: "Plus de 1 500 polices gratuites, utilisables pour une marque, à installer ou à retrouver dans Canva." },
+    { nom: "Fontjoy", url: "fontjoy.com", tag: "Gratuit", usage: "Trouver une paire de polices qui va bien ensemble : une pour les titres, une pour le texte." }
+  ] },
+  { cat: "Créer ses visuels", quand: "Modules 2 et 4", items: [
+    { nom: "Canva", url: "canva.com", tag: "Gratuit + Pro", usage: "Logos simples, publications, stories, affiches, cartes de visite : partez d'un modèle et appliquez vos couleurs et vos polices." },
+    { nom: "Adobe Express", url: "adobe.com/express", tag: "Gratuit + Pro", usage: "Une alternative à Canva, avec des modèles et des animations rapides." },
+    { nom: "Photopea", url: "photopea.com", tag: "Gratuit", usage: "Retoucher une photo comme dans Photoshop, directement dans le navigateur." },
+    { nom: "remove.bg", url: "remove.bg", tag: "Gratuit + Pro", usage: "Détourer un produit en un clic pour le poser sur un fond aux couleurs de la marque." }
+  ] },
+  { cat: "Photos et icônes", quand: "Modules 2 et 4", items: [
+    { nom: "Unsplash", url: "unsplash.com", tag: "Gratuit", usage: "Photos libres de droits de grande qualité, pour compléter vos propres photos." },
+    { nom: "Pexels", url: "pexels.com", tag: "Gratuit", usage: "Photos et vidéos libres de droits, utiles pour les vidéos courtes." },
+    { nom: "Flaticon", url: "flaticon.com", tag: "Gratuit (citer l'auteur)", usage: "Des icônes pour vos visuels : téléphone, horaires, livraison..." }
+  ] },
+  { cat: "Vidéo courte", quand: "Module 4 · contenus", items: [
+    { nom: "CapCut", url: "capcut.com", tag: "Gratuit + Pro", usage: "Monter une vidéo verticale sur téléphone : découpe, musique, sous-titres. Certaines fonctions sont devenues payantes." },
+    { nom: "VN Video Editor", url: "vlogger.vn", tag: "Gratuit", usage: "Montage sur téléphone sans filigrane, une bonne alternative à CapCut." }
+  ] },
+  { cat: "Être trouvé et contacté", quand: "Module 3 · canaux", items: [
+    { nom: "WhatsApp Business", url: "business.whatsapp.com", tag: "Gratuit", usage: "Profil professionnel, catalogue, message d'accueil automatique et réponses rapides." },
+    { nom: "Google Business Profile", url: "business.google.com", tag: "Gratuit", usage: "Votre fiche sur Google Maps : horaires, photos, avis clients." },
+    { nom: "QR Code Monkey", url: "qrcode-monkey.com", tag: "Gratuit", usage: "Créer un QR code vers votre WhatsApp ou votre page, aux couleurs de votre charte." }
+  ] },
+  { cat: "Planifier et mesurer", quand: "Modules 4 et 5", items: [
+    { nom: "Meta Business Suite", url: "business.facebook.com", tag: "Gratuit", usage: "Programmer vos publications Facebook et Instagram à l'avance et suivre portée, engagement et messages." },
+    { nom: "Buffer", url: "buffer.com", tag: "Gratuit + Pro", usage: "Programmer sur plusieurs réseaux : la version gratuite couvre 3 comptes et 10 publications en attente par compte." },
+    { nom: "Assistant IA (Claude, ChatGPT...)", url: "claude.ai", tag: "Gratuit + Pro", usage: "Trouver des idées de publications, reformuler une bio ou une légende. Relisez toujours avant de publier." }
+  ] }
+];
+var COUL = ["#0F4C5C", "#4F8A5B", "#E3A23B", "#C9654B", "#2F6E7D", "#8C3B5E", "#5A5F62"];
+function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
+var params = new URLSearchParams(location.search);
+var PROJ = params.has("projection") || window.parent !== window;
+if (PROJ) document.body.classList.add("proj");
+var g = document.getElementById("grille");
+OUTILS.forEach(function (c, i) {
+  var bloc = el("section", "cat"); bloc.style.borderTopColor = COUL[i % COUL.length];
+  var h = el("div", "cat-head"); h.appendChild(el("h2", null, c.cat)); h.appendChild(el("span", "quand", c.quand)); bloc.appendChild(h);
+  c.items.forEach(function (o) {
+    var a = el("a", "outil"); a.href = "https://" + o.url; a.target = "_blank"; a.rel = "noopener";
+    var ini = el("div", "ini", o.nom.charAt(0).toUpperCase()); ini.style.background = COUL[i % COUL.length];
+    var d = el("div"), l1 = el("div", "l1");
+    l1.appendChild(el("span", "nom", o.nom)); l1.appendChild(el("span", "tag " + (o.tag === "Gratuit" ? "g" : o.tag.indexOf("Pro") > -1 ? "p" : "g"), o.tag));
+    d.appendChild(l1); d.appendChild(el("div", "url", o.url)); d.appendChild(el("p", "usage", o.usage)); d.appendChild(el("span", "ouvrir", "Ouvrir le site →"));
+    a.appendChild(ini); a.appendChild(d); bloc.appendChild(a);
+  });
+  g.appendChild(bloc);
+});
+var ast = el("div", "astuce-c"); ast.appendChild(el("b", null, "Un outil par étape")); ast.appendChild(el("p", null, "Une palette, deux polices, Canva pour les visuels, CapCut pour la vidéo, Meta Business Suite pour programmer. Presque tout est gratuit.")); g.appendChild(ast);
+/* QR code vers cette page */
+(function () {
+  if (typeof qrcode !== "function") return;
+  var NS = "http://www.w3.org/2000/svg", svg = document.createElementNS(NS, "svg"), qr = qrcode(0, "M");
+  qr.addData(location.origin.indexOf("http") === 0 ? location.origin + "/outils" : "https://formation-design.vercel.app/outils"); qr.make();
+  var n = qr.getModuleCount(), m = 2, s = n + 2 * m, d = "";
+  svg.setAttribute("viewBox", "0 0 " + s + " " + s); svg.setAttribute("shape-rendering", "crispEdges");
+  for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (qr.isDark(r, c)) d += "M" + (c + m) + " " + (r + m) + "h1v1h-1z";
+  var p = document.createElementNS(NS, "path"); p.setAttribute("d", d); p.setAttribute("fill", "#0A3642"); svg.appendChild(p);
+  var box = document.getElementById("qr"); box.insertBefore(svg, box.firstChild);
+})();
+/* Projection : ajuster à la largeur de l'écran */
+function zoom() { if (!PROJ) return; var r = document.documentElement; r.style.zoom = 1; var h = document.querySelector(".wrap").scrollHeight; r.style.zoom = Math.min(window.innerWidth / 1280, window.innerHeight / h); }
+zoom(); window.addEventListener("resize", zoom); document.fonts && document.fonts.ready.then(zoom);
+if (window.parent !== window) {
+  document.addEventListener("keydown", function (ev) {
+    try { window.parent.dispatchEvent(new KeyboardEvent("keydown", { key: ev.key, code: ev.code, bubbles: true })); ev.preventDefault(); } catch (e) {}
+  });
+}
+</script>
+</body>
+</html>

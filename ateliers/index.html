@@ -306,6 +306,7 @@ function menu(root) {
   var fin = el("section", "sec");
   var hf = el("div", "sec-head"); add(hf, el("h2", null, "Pour finir"), el("span", "sec-sub", "Quiz et manuel")); fin.appendChild(hf);
   [["Q", "Quiz final", "10 questions pour vérifier ce que vous avez retenu.", "Répondre au quiz  →", location.origin + "/quiz"],
+   ["O", "La boîte à outils", "Coolors, Color Hunt, Canva, CapCut... les outils gratuits pour créer votre charte et vos publications.", "Voir les outils  →", location.origin + "/outils"],
    ["M", "Mon manuel du participant", "Le résumé du cours et toutes vos réponses, en PDF : à télécharger ou à recevoir par e-mail.", "Ouvrir mon manuel  →", location.origin + "/manuel"]].forEach(function (x) {
     var t = el("div", "tuile ocre"), corps = el("div", "corps");
     add(corps, el("h3", null, x[1]), el("p", null, x[2]));

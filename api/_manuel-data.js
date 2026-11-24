@@ -142,7 +142,19 @@ export const MODULES = [
     ]
   },
   {
-    num: "06", titre: "Synthèse",
+    num: "06", titre: "La boîte à outils",
+    intro: "Des outils gratuits ou presque, utilisables depuis un téléphone, pour appliquer tout ce que vous avez appris.",
+    sections: [
+      { titre: "Les outils pratiques, étape par étape",
+        texte: ["Inutile de tout installer : commencez par un outil par étape. Pour votre charte, une palette sur Color Hunt ou Coolors et deux polices sur Google Fonts. Pour vos visuels, Canva avec vos couleurs et vos polices. Pour vos vidéos, CapCut ou VN. Pour être trouvé, WhatsApp Business et votre fiche Google. Pour tenir le rythme, Meta Business Suite.",
+                "La mention « Gratuit + Pro » signifie que la version gratuite suffit pour démarrer, et que certaines options sont payantes. Les offres changent régulièrement : vérifiez sur le site avant de payer quoi que ce soit."],
+        illus: "outils",
+        astuce: "Retrouvez la liste avec les liens cliquables sur formation-design.vercel.app/outils.",
+        retenir: ["Un outil par étape, pas plus au début.", "Notez vos codes HEX et vos polices : ils se retrouvent dans tous les outils.", "La version gratuite suffit pour démarrer."] }
+    ]
+  },
+  {
+    num: "07", titre: "Synthèse",
     intro: "Cinq idées à garder en tête, et votre quiz corrigé.",
     sections: [
       { titre: "Ce qu'on retient", texte: [], illus: "synthese" }
