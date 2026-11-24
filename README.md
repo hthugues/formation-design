@@ -10,7 +10,10 @@ Un seul site Vercel contient :
 | `/ateliers` | Le menu des ateliers en ligne B, C et D, pour les participants |
 | `/ateliers?atelier=B` | L'atelier B directement (idem avec C et D) |
 | `/ateliers?atelier=B&projection=1` | À projeter : QR code géant + mur des réponses en direct |
-| `/ateliers?atelier=B&mur=1` | Le mur seul, en grand |
+| `/ateliers?atelier=B&mur=1` | Le mur seul, en grand (affiché aussi dans la présentation, après chaque atelier) |
+| `/quiz` | Le quiz final pour les participants (5 questions, score immédiat) |
+| `/quiz?projection=1` | À projeter : QR code du quiz + participants qui ont répondu |
+| `/quiz?resultats=1` | Résultats du quiz : réponses par question et classement |
 
 Les participants n'ont besoin d'aucun compte : ils scannent le QR code, écrivent leur nom, répondent, et voient aussitôt le mur du groupe.
 
@@ -21,6 +24,7 @@ Les participants n'ont besoin d'aucun compte : ils scannent le QR code, écriven
 - `ateliers/qrcode.js` : générateur de QR code (licence MIT, Kazuhiko Arase).
 - `api/reponses.js` : enregistre et renvoie les réponses.
 - `api/admin.js` : export et remise à zéro, protégés par une clé.
+- `quiz/index.html` et `api/quiz.js` : le quiz final en ligne (questions dans `api/_quiz-data.js`).
 - `package.json`, `vercel.json` : configuration.
 
 ## Mise en ligne (une seule fois, environ 10 minutes)
@@ -35,10 +39,11 @@ Les participants n'ont besoin d'aucun compte : ils scannent le QR code, écriven
 ## Le jour de la formation
 
 - Ouvrez `https://votre-site.vercel.app/` et appuyez sur F (plein écran) puis P (mode présentateur).
-- Aux slides 17, 23 et 30, ouvrez dans un autre onglet `/ateliers?atelier=B&projection=1` (puis C, puis D).
+- Aux slides 17, 24 et 32 (ateliers), ouvrez dans un autre onglet `/ateliers?atelier=B&projection=1` (puis C, puis D) pour projeter le QR code. La slide suivante affiche le mur en direct.
+- Slide 38 : QR code du quiz. Slide 39 : les questions, avec les votes en ligne qui s'affichent tout seuls. Slide 40 : résultats et classement.
 - Prévoyez une connexion internet pour la salle et pour les participants (Wi-Fi ou données mobiles).
 
 ## Outils de l'animateur
 
 - Exporter toutes les réponses : `/api/admin?cle=VOTRE_CLE&action=exporter`
-- Vider un atelier après les essais : `/api/admin?cle=VOTRE_CLE&action=vider&atelier=B`
+- Vider un atelier après les essais : `/api/admin?cle=VOTRE_CLE&action=vider&atelier=B` (ou `C`, `D`, `QUIZ`)

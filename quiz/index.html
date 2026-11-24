@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz éclair - Identité visuelle &amp; Marketing digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  :root { --lagon:#0F4C5C; --lagon-deep:#0A3642; --lagon-soft:#C9DCE0; --ocre:#E3A23B; --ocre-ink:#8A5D0E; --sable:#FAF7F2; --gres:#E4DED3; --blanc:#FFFDF9; --ink:#2B2D2F; --soft:#5A5F62; --ok:#2E7D4F; --ko:#B42318; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--sable); color: var(--ink); font-family: Inter, Arial, sans-serif; font-size: 17px; line-height: 1.45; }
+  h1, h2, h3 { font-family: "Playfair Display", Georgia, serif; color: var(--lagon); margin: 0; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 24px 18px 80px; }
+  .wrap.large { max-width: 1700px; padding: 40px 56px; }
+  .eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--ocre-ink); }
+  .top h1 { font-size: 36px; line-height: 1.1; margin-top: 6px; }
+  .large .top h1 { font-size: 56px; }
+  .sub { color: var(--soft); margin-top: 10px; }
+  .card { background: var(--blanc); border-top: 5px solid var(--lagon); border-radius: 6px; padding: 18px; margin-top: 16px; box-shadow: 0 1px 2px rgba(15,76,92,.06); }
+  label { display: block; font-weight: 600; margin-bottom: 6px; }
+  input[type=text] { width: 100%; font: inherit; padding: 12px; border: 1.5px solid var(--gres); border-radius: 6px; background: #fff; }
+  input[type=text]:focus { outline: none; border-color: var(--lagon); box-shadow: 0 0 0 3px rgba(15,76,92,.15); }
+  .q .num { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--ocre-ink); }
+  .q h2 { font-size: 22px; margin: 6px 0 12px; line-height: 1.25; }
+  .opt { display: flex; gap: 12px; align-items: flex-start; width: 100%; text-align: left; font: inherit; background: #fff; border: 1.5px solid var(--gres); border-radius: 10px; padding: 12px 14px; margin-top: 8px; cursor: pointer; color: var(--ink); }
+  .opt .n { font-family: "Playfair Display", Georgia, serif; font-weight: 700; font-size: 22px; color: var(--lagon); line-height: 1.1; min-width: 18px; }
+  .opt.on { border-color: var(--lagon); background: #E9F1F3; box-shadow: 0 0 0 2px var(--lagon); }
+  .btn { display: block; width: 100%; background: var(--lagon); color: var(--sable); border: none; border-radius: 40px; padding: 15px; font: inherit; font-weight: 700; font-size: 17px; cursor: pointer; margin-top: 20px; }
+  .btn:disabled { opacity: .6; }
+  .btn.ghost { background: none; color: var(--lagon); border: 2px solid var(--lagon); }
+  .msg { margin-top: 12px; padding: 12px 14px; border-radius: 6px; display: none; }
+  .msg.err { display: block; background: #FBE4E1; color: var(--ko); }
+  .score { text-align: center; padding: 26px 18px; background: var(--lagon); color: var(--sable); border-radius: 10px; margin-top: 18px; }
+  .score .big { font-family: "Playfair Display", Georgia, serif; font-size: 72px; font-weight: 700; color: var(--ocre); line-height: 1; }
+  .corr { border-left: 4px solid var(--ok); }
+  .corr.faux { border-left-color: var(--ko); }
+  .verdict { font-weight: 700; font-size: 14px; }
+  .verdict.ok { color: var(--ok); } .verdict.ko { color: var(--ko); }
+  .expl { color: var(--soft); font-size: 15px; margin-top: 6px; }
+  /* Projection */
+  .proj { display: grid; grid-template-columns: 360px 1fr; gap: 48px; margin-top: 28px; align-items: start; }
+  .qrbox { background: var(--blanc); border-top: 6px solid var(--ocre); border-radius: 8px; padding: 28px; text-align: center; }
+  .qrbox svg { width: 100%; height: auto; display: block; }
+  .qrbox .go { font-family: "Playfair Display", Georgia, serif; font-size: 28px; color: var(--lagon); font-weight: 700; margin-bottom: 14px; }
+  .qrbox .url { font-size: 22px; font-weight: 700; color: var(--lagon); margin-top: 14px; }
+  .count { font-family: "Playfair Display", Georgia, serif; font-size: 120px; font-weight: 700; color: var(--lagon); line-height: 1; }
+  .count-l { font-size: 26px; color: var(--soft); margin-top: 6px; }
+  .names { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+  .chip { background: var(--blanc); border: 1.5px solid var(--gres); border-radius: 30px; padding: 6px 16px; font-size: 20px; font-weight: 600; color: var(--lagon); }
+  /* Résultats */
+  .res { display: grid; grid-template-columns: 2fr 1fr; gap: 48px; margin-top: 24px; align-items: start; }
+  .qgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .qres { background: var(--blanc); border-radius: 8px; padding: 14px 18px; }
+  .qres .qt { font-weight: 700; font-size: 19px; color: var(--lagon); }
+  .bar { display: grid; grid-template-columns: 30px 1fr 84px; gap: 10px; align-items: center; margin-top: 8px; font-size: 17px; }
+  .bar .track { background: var(--gres); border-radius: 6px; height: 26px; overflow: hidden; }
+  .bar .fill { background: #9FB9C0; height: 100%; }
+  .bar.good .fill { background: var(--lagon); }
+  .bar .k { font-family: "Playfair Display", Georgia, serif; font-weight: 700; color: var(--lagon); font-size: 20px; }
+  .bar.good .p { font-weight: 700; color: var(--lagon); }
+  .podium { background: var(--blanc); border-radius: 8px; padding: 22px; }
+  .podium h2 { font-size: 30px; margin-bottom: 10px; }
+  .rank { display: grid; grid-template-columns: 44px 1fr 70px; gap: 10px; align-items: center; padding: 10px 0; border-top: 1px solid var(--gres); font-size: 21px; }
+  .rank .r { font-family: "Playfair Display", Georgia, serif; font-weight: 700; color: var(--ocre-ink); font-size: 24px; }
+  .rank .s { text-align: right; font-weight: 700; color: var(--lagon); }
+  .live { font-size: 15px; color: var(--soft); margin-top: 10px; }
+  .empty { color: var(--soft); padding: 20px 0; }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script src="/ateliers/qrcode.js"></script>
+<script>
+var P = new URLSearchParams(location.search);
+var MODE = P.get("projection") === "1" ? "projection" : (P.get("resultats") === "1" ? "resultats" : "participant");
+
+function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
+function add(p) { for (var i = 1; i < arguments.length; i++) if (arguments[i]) p.appendChild(arguments[i]); return p; }
+function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+function jeton() {
+  var t = store("jeton_quiz");
+  if (!t) { var a = new Uint8Array(16); crypto.getRandomValues(a); t = Array.prototype.map.call(a, function (x) { return ("0" + x.toString(16)).slice(-2); }).join(""); store("jeton_quiz", t); }
+  return t;
+}
+function api(q, opts) {
+  return fetch("/api/quiz" + (q || ""), opts || { cache: "no-store" }).then(function (r) {
+    return r.json().catch(function () { return {}; }).then(function (d) { if (!r.ok) throw new Error(d.erreur || "erreur " + r.status); return d; });
+  });
+}
+function entete(root, titre, sous) {
+  var t = el("div", "top");
+  add(t, el("div", "eyebrow", "Synthèse · Quiz éclair"), el("h1", null, titre));
+  if (sous) t.appendChild(el("p", "sub", sous));
+  root.appendChild(t);
+}
+function qrSvg(texte) {
+  var NS = "http://www.w3.org/2000/svg", svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("role", "img"); svg.setAttribute("aria-label", "QR code vers " + texte);
+  if (typeof qrcode !== "function") return svg;
+  var qr = qrcode(0, "M"); qr.addData(texte); qr.make();
+  var n = qr.getModuleCount(), m = 2, s = n + 2 * m, d = "";
+  svg.setAttribute("viewBox", "0 0 " + s + " " + s); svg.setAttribute("shape-rendering", "crispEdges");
+  var bg = document.createElementNS(NS, "rect"); bg.setAttribute("width", s); bg.setAttribute("height", s); bg.setAttribute("fill", "#fff"); svg.appendChild(bg);
+  for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (qr.isDark(r, c)) d += "M" + (c + m) + " " + (r + m) + "h1v1h-1z";
+  var p = document.createElementNS(NS, "path"); p.setAttribute("d", d); p.setAttribute("fill", "#0A3642"); svg.appendChild(p);
+  return svg;
+}
+function heure() { return new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", second: "2-digit" }); }
+
+/* ---------- participant ---------- */
+function participant(root) {
+  entete(root, "Quiz éclair", "5 questions, une seule bonne réponse à chaque fois. Votre score s’affiche juste après.");
+  var zone = el("div"); root.appendChild(zone);
+  Promise.all([api("?questions=1"), api("?jeton=" + jeton())]).then(function (r) {
+    var questions = r[0], etat = r[1];
+    if (etat.moi) resultat(zone, questions, etat.moi.score, etat.moi.corrections, etat.moi.reponses);
+    else formulaire(zone, questions, []);
+  }).catch(function (e) { zone.appendChild(el("div", "msg err", "Impossible de charger le quiz (" + e.message + "). Vérifiez votre connexion.")); zone.lastChild.style.display = "block"; });
+}
+function formulaire(zone, questions, avant) {
+  zone.textContent = "";
+  var choix = avant.slice();
+  var c = el("div", "card"), nom = el("input"); nom.type = "text"; nom.id = "nom"; nom.maxLength = 80; nom.placeholder = "Prénom et nom";
+  nom.value = store("nom") || "";
+  var lab = el("label", null, "Votre nom"); lab.htmlFor = "nom";
+  add(c, lab, nom); zone.appendChild(c);
+  questions.forEach(function (q, i) {
+    var b = el("div", "card q");
+    add(b, el("div", "num", "Question " + (i + 1) + " / " + questions.length + " · " + q.theme), el("h2", null, q.question));
+    var opts = [];
+    q.options.forEach(function (o, j) {
+      var bt = el("button", "opt" + (choix[i] === j + 1 ? " on" : "")); bt.type = "button";
+      add(bt, el("span", "n", String(j + 1)), el("span", null, o));
+      bt.onclick = function () { choix[i] = j + 1; opts.forEach(function (x, k) { x.className = "opt" + (k === j ? " on" : ""); }); };
+      opts.push(bt); b.appendChild(bt);
+    });
+    zone.appendChild(b);
+  });
+  var btn = el("button", "btn", "Valider mes réponses"), msg = el("div", "msg");
+  add(zone, btn, msg);
+  btn.onclick = function () {
+    msg.className = "msg";
+    var n = nom.value.trim();
+    if (!n) { msg.className = "msg err"; msg.textContent = "Indiquez votre nom."; nom.focus(); return; }
+    for (var i = 0; i < questions.length; i++) if (!choix[i]) { msg.className = "msg err"; msg.textContent = "Il manque la réponse à la question " + (i + 1) + "."; return; }
+    store("nom", n); btn.disabled = true; btn.textContent = "Envoi…";
+    api("", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ jeton: jeton(), nom: n, reponses: choix }) })
+      .then(function (r) { resultat(zone, questions, r.score, r.corrections, choix); window.scrollTo(0, 0); })
+      .catch(function (e) { btn.disabled = false; btn.textContent = "Valider mes réponses"; msg.className = "msg err"; msg.textContent = "L’envoi n’a pas abouti (" + e.message + "). Réessayez."; });
+  };
+}
+function resultat(zone, questions, score, corrections, choix) {
+  zone.textContent = "";
+  var s = el("div", "score");
+  add(s, el("div", "big", score + " / " + questions.length), el("div", null, score === questions.length ? "Parfait !" : score >= 3 ? "Bravo, c’est bien retenu." : "Bon début : relisez les explications."));
+  zone.appendChild(s);
+  questions.forEach(function (q, i) {
+    var c = corrections[i] || {}, b = el("div", "card corr" + (c.juste ? "" : " faux"));
+    add(b, el("div", "verdict " + (c.juste ? "ok" : "ko"), c.juste ? "Bonne réponse" : "Réponse attendue : " + c.bonne),
+        el("h2", null, q.question));
+    b.querySelector("h2").style.fontSize = "18px";
+    if (!c.juste && c.bonne) b.appendChild(el("div", null, c.bonne + ". " + q.options[c.bonne - 1]));
+    if (c.explication) b.appendChild(el("div", "expl", c.explication));
+    zone.appendChild(b);
+  });
+  var again = el("button", "btn ghost", "Modifier mes réponses");
+  again.onclick = function () { formulaire(zone, questions, choix || []); window.scrollTo(0, 0); };
+  zone.appendChild(again);
+}
+
+/* ---------- projection : QR + participants ---------- */
+function projection(root) {
+  root.className = "wrap large";
+  entete(root, "Quiz éclair", null);
+  var g = el("div", "proj"), q = el("div", "qrbox"), d = el("div");
+  add(q, el("div", "go", "Scannez pour répondre"), qrSvg(location.origin + "/quiz"), el("div", "url", location.host + "/quiz"));
+  var cnt = el("div", "count", "0"), lab = el("div", "count-l", "participants ont répondu"), names = el("div", "names"), live = el("div", "live");
+  add(d, cnt, lab, names, live); add(g, q, d); root.appendChild(g);
+  function charger() {
+    api("").then(function (e) {
+      cnt.textContent = e.total; lab.textContent = e.total > 1 ? "participants ont répondu" : "participant a répondu";
+      names.textContent = "";
+      e.participants.slice().sort(function (a, b) { return b.ts - a.ts; }).forEach(function (p) { names.appendChild(el("span", "chip", p.nom)); });
+      live.textContent = "Mis à jour à " + heure();
+    }).catch(function () { live.textContent = "Connexion difficile, nouvel essai…"; });
+  }
+  charger(); setInterval(charger, 4000);
+}
+
+/* ---------- résultats ---------- */
+function resultats(root) {
+  root.className = "wrap large";
+  entete(root, "Résultats du quiz", null);
+  var g = el("div", "res"), gauche = el("div", "qgrid"), droite = el("div", "podium"), live = el("div", "live");
+  add(g, gauche, droite); add(root, g, live);
+  function charger() {
+    api("?resultats=1").then(function (e) {
+      gauche.textContent = ""; droite.textContent = "";
+      (e.questions || []).forEach(function (q, i) {
+        var box = el("div", "qres"), tot = e.stats[i].reduce(function (a, b) { return a + b; }, 0);
+        box.appendChild(el("div", "qt", (i + 1) + ". " + q.question));
+        e.stats[i].forEach(function (v, j) {
+          var pct = tot ? Math.round(v / tot * 100) : 0, row = el("div", "bar" + (q.answer === j + 1 ? " good" : ""));
+          var tr = el("div", "track"), f = el("div", "fill"); f.style.width = pct + "%"; tr.appendChild(f);
+          add(row, el("span", "k", String(j + 1)), tr, el("span", "p", pct + " %" + (q.answer === j + 1 ? " ✓" : "")));
+          row.title = q.options[j];
+          box.appendChild(row);
+        });
+        gauche.appendChild(box);
+      });
+      droite.appendChild(el("h2", null, "Classement"));
+      if (!e.participants.length) droite.appendChild(el("div", "empty", "En attente des premières réponses…"));
+      e.participants.slice(0, 12).forEach(function (p, i) {
+        var r = el("div", "rank"); add(r, el("span", "r", String(i + 1)), el("span", null, p.nom), el("span", "s", p.score + " / 5")); droite.appendChild(r);
+      });
+      if (e.participants.length > 12) droite.appendChild(el("div", "live", "+ " + (e.participants.length - 12) + " autres participants"));
+      live.textContent = e.total + " participants · bonne réponse en bleu foncé · mis à jour à " + heure();
+    }).catch(function () { live.textContent = "Connexion difficile, nouvel essai…"; });
+  }
+  charger(); setInterval(charger, 5000);
+}
+
+function agrandir() { document.documentElement.style.zoom = Math.max(1, Math.min(MODE === "resultats" ? 1.4 : 2.2, window.innerWidth / (MODE === "resultats" ? 1400 : 1150))); }
+
+/* Dans la présentation (iframe) : les flèches et l'espace restent à la présentation. */
+if (window.parent !== window) {
+  document.addEventListener("keydown", function (ev) {
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(ev.target.tagName)) return;
+    try { window.parent.dispatchEvent(new KeyboardEvent("keydown", { key: ev.key, code: ev.code, bubbles: true })); ev.preventDefault(); } catch (e) {}
+  });
+}
+
+(function () {
+  var root = document.getElementById("app");
+  if (MODE !== "participant") { agrandir(); window.addEventListener("resize", agrandir); }
+  if (MODE === "projection") projection(root); else if (MODE === "resultats") resultats(root); else participant(root);
+})();
+</script>
+</body>
+</html>

@@ -96,7 +96,7 @@
   .empty { text-align: center; color: var(--soft); padding: 40px 10px; }
   .large .top h1 { font-size: 44px; }
   .large .resp .who { font-size: 26px; }
-  .proj { display: grid; grid-template-columns: 440px 1fr; gap: 40px; align-items: start; }
+  .proj { display: grid; grid-template-columns: 360px 1fr; gap: 40px; align-items: start; }
   .qrbox { position: sticky; top: 24px; background: var(--blanc); border-top: 6px solid var(--ocre); border-radius: 8px; padding: 28px; text-align: center; }
   .qrbox svg { width: 100%; height: auto; display: block; }
   .qrbox .go { font-family: "Playfair Display", Georgia, serif; font-size: 26px; color: var(--lagon); font-weight: 700; margin-bottom: 14px; }
@@ -575,11 +575,21 @@ function pageProjection(root) {
   demarrerMur(grid, cpt, etat);
 }
 
+function agrandir() { document.documentElement.style.zoom = Math.max(1, Math.min(2.2, window.innerWidth / 1150)); }
+
+/* Dans la présentation (iframe) : les flèches et l'espace restent à la présentation. */
+if (window.parent !== window) {
+  document.addEventListener("keydown", function (ev) {
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(ev.target.tagName)) return;
+    try { window.parent.dispatchEvent(new KeyboardEvent("keydown", { key: ev.key, code: ev.code, bubbles: true })); ev.preventDefault(); } catch (e) {}
+  });
+}
+
 (function () {
   var root = document.getElementById("app");
   if (!CONF[ATELIER]) menu(root);
-  else if (PROJ) pageProjection(root);
-  else if (MUR) pageMur(root);
+  else if (PROJ) { agrandir(); window.addEventListener("resize", agrandir); pageProjection(root); }
+  else if (MUR) { agrandir(); window.addEventListener("resize", agrandir); pageMur(root); }
   else pageAtelier(root);
 })();
 </script>
