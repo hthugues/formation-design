@@ -93,8 +93,8 @@ function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c
 function add(p) { for (var i = 1; i < arguments.length; i++) if (arguments[i]) p.appendChild(arguments[i]); return p; }
 function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
 function jeton() {
-  var t = store("jeton_quiz");
-  if (!t) { var a = new Uint8Array(16); crypto.getRandomValues(a); t = Array.prototype.map.call(a, function (x) { return ("0" + x.toString(16)).slice(-2); }).join(""); store("jeton_quiz", t); }
+  var t = store("jeton_participant");
+  if (!t) { var a = new Uint8Array(16); crypto.getRandomValues(a); t = Array.prototype.map.call(a, function (x) { return ("0" + x.toString(16)).slice(-2); }).join(""); store("jeton_participant", t); }
   return t;
 }
 function api(q, opts) {
@@ -179,6 +179,8 @@ function resultat(zone, questions, score, corrections, choix) {
     if (c.explication) b.appendChild(el("div", "expl", c.explication));
     zone.appendChild(b);
   });
+  var man = el("a", "btn", "Recevoir mon manuel du participant"); man.href = location.origin + "/manuel"; man.style.cssText = "display:block;text-align:center;text-decoration:none;box-sizing:border-box";
+  zone.appendChild(man);
   var again = el("button", "btn ghost", "Modifier mes réponses");
   again.onclick = function () { formulaire(zone, questions, choix || []); window.scrollTo(0, 0); };
   zone.appendChild(again);

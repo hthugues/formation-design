@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mon manuel du participant - Identité visuelle &amp; Marketing digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  :root { --lagon:#0F4C5C; --ocre:#E3A23B; --ocre-ink:#8A5D0E; --sable:#FAF7F2; --gres:#E4DED3; --blanc:#FFFDF9; --ink:#2B2D2F; --soft:#5A5F62; --ok:#2E7D4F; --ko:#B42318; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--sable); color: var(--ink); font-family: Inter, Arial, sans-serif; font-size: 17px; line-height: 1.45; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 22px 18px 60px; }
+  .back { color: var(--lagon); font-weight: 600; text-decoration: none; font-size: 15px; }
+  .logo { display: block; width: 150px; margin: 18px auto 8px; }
+  .eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--ocre-ink); text-align: center; }
+  h1 { font-family: "Playfair Display", Georgia, serif; color: var(--lagon); font-size: 32px; line-height: 1.15; margin: 6px 0 4px; text-align: center; }
+  .nom { text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: 26px; margin-top: 14px; }
+  .marque { text-align: center; color: var(--ocre-ink); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; font-size: 14px; }
+  .card { background: var(--blanc); border-top: 5px solid var(--lagon); border-radius: 8px; padding: 18px; margin-top: 18px; box-shadow: 0 1px 2px rgba(15,76,92,.06); }
+  .card h2 { font-family: "Playfair Display", Georgia, serif; color: var(--lagon); font-size: 21px; margin: 0 0 10px; }
+  .faits { display: flex; flex-wrap: wrap; gap: 6px; }
+  .fait { font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 20px; background: var(--gres); color: var(--soft); }
+  .fait.ok { background: #DFF0E5; color: var(--ok); }
+  .btn { display: block; width: 100%; text-align: center; text-decoration: none; background: var(--lagon); color: #fff; border: none; border-radius: 40px; padding: 15px; font: inherit; font-weight: 700; cursor: pointer; margin-top: 12px; }
+  .btn.ocre { background: var(--ocre); color: #0A3642; }
+  .btn:disabled { opacity: .6; }
+  input[type=email] { width: 100%; font: inherit; padding: 12px; border: 1.5px solid var(--gres); border-radius: 6px; background: #fff; }
+  label { display: block; font-weight: 600; font-size: 15px; margin-bottom: 6px; }
+  .msg { margin-top: 12px; padding: 12px 14px; border-radius: 6px; display: none; }
+  .msg.err { display: block; background: #FBE4E1; color: var(--ko); }
+  .msg.ok { display: block; background: #DFF0E5; color: var(--ok); }
+  .hint { color: var(--soft); font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="/ateliers">← Tous les ateliers</a>
+  <img class="logo" src="/img/blossom-couleur.png" alt="Logo B-Lossom Center">
+  <div class="eyebrow">Manuel du participant</div>
+  <h1>Identité visuelle &amp; Marketing digital</h1>
+  <div id="zone"><p class="hint" style="text-align:center">Chargement…</p></div>
+</div>
+<script>
+function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
+function store(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+var J = store("jeton_participant"), zone = document.getElementById("zone");
+var NOMS = { P: "Mon projet", A: "Atelier A", B: "Atelier B", C: "Atelier C", D: "Atelier D" };
+if (!J) {
+  zone.textContent = "";
+  zone.appendChild(el("p", "hint", "Aucune réponse trouvée sur ce téléphone. Participez d’abord aux ateliers depuis ce même téléphone : votre manuel se remplit avec vos réponses."));
+} else {
+  fetch("/api/manuel?info=1&jeton=" + J, { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (d) {
+    zone.textContent = "";
+    if (d.erreur) { zone.appendChild(el("p", "hint", d.erreur)); return; }
+    zone.appendChild(el("div", "nom", d.nom || "Participant"));
+    if (d.marque) zone.appendChild(el("div", "marque", d.marque));
+    var c1 = el("div", "card"); c1.appendChild(el("h2", null, "Ce que contient votre manuel"));
+    c1.appendChild(el("p", "hint", "Le résumé de chaque partie du cours, vos réponses aux ateliers et au quiz, et votre plan d’action."));
+    var f = el("div", "faits");
+    ["P", "A", "B", "C", "D"].forEach(function (k) { f.appendChild(el("span", "fait" + (d.ateliers.indexOf(k) >= 0 ? " ok" : ""), (d.ateliers.indexOf(k) >= 0 ? "✓ " : "") + NOMS[k])); });
+    f.appendChild(el("span", "fait" + (d.quiz ? " ok" : ""), (d.quiz ? "✓ " : "") + "Quiz"));
+    c1.appendChild(f);
+    var dl = el("a", "btn", "Télécharger mon manuel (PDF)"); dl.href = "/api/manuel?jeton=" + J;
+    c1.appendChild(dl);
+    zone.appendChild(c1);
+    var c2 = el("div", "card"); c2.style.borderTopColor = "var(--ocre)";
+    c2.appendChild(el("h2", null, "Le recevoir par e-mail"));
+    var lab = el("label", null, "Votre adresse e-mail"); lab.htmlFor = "mail";
+    var mail = el("input"); mail.type = "email"; mail.id = "mail"; mail.placeholder = "prenom@exemple.com"; mail.value = store("email") || "";
+    if (d.email && !mail.value) mail.placeholder = d.email;
+    var btn = el("button", "btn ocre", "M’envoyer mon manuel"), msg = el("div", "msg");
+    btn.onclick = function () {
+      msg.className = "msg"; btn.disabled = true; btn.textContent = "Envoi en cours…";
+      fetch("/api/manuel", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ jeton: J, email: mail.value.trim() || undefined }) })
+        .then(function (r) { return r.json().then(function (x) { if (!r.ok) throw new Error(x.erreur || "erreur"); return x; }); })
+        .then(function (x) { msg.className = "msg ok"; msg.textContent = "C’est envoyé à " + x.email + ". Pensez à regarder dans vos courriers indésirables."; })
+        .catch(function (e) { msg.className = "msg err"; msg.textContent = e.message; })
+        .then(function () { btn.disabled = false; btn.textContent = "M’envoyer mon manuel"; });
+    };
+    c2.appendChild(lab); c2.appendChild(mail); c2.appendChild(btn); c2.appendChild(msg);
+    if (!d.mail) c2.appendChild(el("p", "hint", "L’envoi par e-mail sera activé par le formateur à la fin de la formation. Vous pouvez déjà télécharger votre manuel."));
+    zone.appendChild(c2);
+  }).catch(function () { zone.textContent = ""; zone.appendChild(el("p", "hint", "Connexion difficile. Réessayez dans un instant.")); });
+}
+</script>
+</body>
+</html>

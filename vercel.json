@@ -3,7 +3,20 @@
   "headers": [
     {
       "source": "/api/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "no-store" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
     }
-  ]
+  ],
+  "functions": {
+    "api/admin.js": {
+      "maxDuration": 60
+    },
+    "api/manuel.js": {
+      "maxDuration": 30
+    }
+  }
 }

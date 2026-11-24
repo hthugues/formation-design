@@ -9,6 +9,7 @@ export const pid = (jeton) => createHash("sha256").update(String(jeton)).digest(
 const JETON = /^[a-f0-9]{32}$/;
 const MAX_PAR_ATELIER = 300;
 const MAX_TAILLE = 8000;
+const EMAIL = /^[^\s@<>"]{1,64}@[^\s@<>"]{1,190}\.[a-z]{2,}$/i;
 
 let client;
 function db() {
@@ -60,6 +61,15 @@ export default async function handler(req, res) {
       if (!JETON.test(jeton)) return res.status(400).json({ erreur: "Jeton invalide, rechargez la page." });
       if (!reponse || typeof reponse !== "object" || Array.isArray(reponse)) return res.status(400).json({ erreur: "Réponse vide." });
 
+      // L'adresse e-mail (atelier de départ) est gardée à part : elle n'apparaît jamais sur le mur.
+      if (reponse.email !== undefined) {
+        const email = String(reponse.email || "").trim().slice(0, 254);
+        delete reponse.email;
+        if (email) {
+          if (!EMAIL.test(email)) return res.status(400).json({ erreur: "Adresse e-mail invalide." });
+          await db().hset("participants", { [jeton]: JSON.stringify({ nom: nettoyer(reponse.nom, 80), email, ts: Date.now() }) });
+        }
+      }
       const nom = nettoyer(reponse.nom, 80);
       const marque = nettoyer(reponse.marque, 80);
       if (!nom) return res.status(400).json({ erreur: "Indiquez votre nom." });

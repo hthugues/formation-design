@@ -12,6 +12,7 @@ Un seul site Vercel contient :
 | `/ateliers?atelier=B&projection=1` | À projeter : QR code géant + mur des réponses en direct |
 | `/ateliers?atelier=B&mur=1` | Le mur seul, en grand (affiché aussi dans la présentation, après chaque atelier) |
 | `/quiz` | Le quiz final pour les participants (10 questions, score immédiat) |
+| `/manuel` | Le manuel du participant : télécharger son PDF ou le recevoir par e-mail |
 | `/editeur` | Éditeur de texte : écrire avec différentes polices, ou importer sa propre police |
 | `/composer` | Affiche interactive : les 5 règles de composition, à cliquer |
 | `/quiz?projection=1` | À projeter : QR code du quiz + participants qui ont répondu |
@@ -52,3 +53,24 @@ Les participants n'ont besoin d'aucun compte : ils scannent le QR code, écriven
 
 - Exporter toutes les réponses : `/api/admin?cle=VOTRE_CLE&action=exporter`
 - Vider un atelier après les essais : `/api/admin?cle=VOTRE_CLE&action=vider&atelier=B` (ou `P`, `A`, `C`, `D`, `QUIZ`)
+
+## Manuel du participant (PDF) et envoi par e-mail
+
+- Dans l'atelier de départ, chaque participant donne son adresse e-mail. Elle est gardée à part et n'apparaît jamais sur les murs.
+- Un même téléphone garde le même identifiant du début à la fin : toutes les réponses (ateliers et quiz) se retrouvent dans son manuel.
+- Le manuel contient : une couverture (titre, formateur, nom du participant, logo B-Lossom Center), le résumé du cours module par module, les réponses du participant à chaque atelier, son quiz corrigé et une page « plan d'action ». Le texte du cours est dans `api/_manuel-data.js`.
+- Les participants peuvent le télécharger à tout moment sur `/manuel` (QR code sur la dernière slide).
+
+### Activer l'envoi par e-mail (Gmail)
+
+1. Sur le compte Gmail qui enverra les manuels, activez la validation en deux étapes, puis créez un « mot de passe d'application » (Compte Google > Sécurité > Mots de passe des applications).
+2. Dans Vercel, « Settings » > « Environment Variables », ajoutez :
+   - `SMTP_USER` : l'adresse Gmail (ex. `formation@gmail.com`)
+   - `SMTP_PASS` : le mot de passe d'application (16 lettres)
+   - facultatif : `SMTP_FROM` (ex. `Hugues Hamba - B-Lossom Center <formation@gmail.com>`), `SMTP_HOST` et `SMTP_PORT` pour un autre fournisseur que Gmail.
+3. Redéployez.
+
+### Envoyer les manuels à la fin de la formation
+
+Ouvrez : `/api/admin?cle=VOTRE_CLE&action=envoyer`
+Chaque participant qui a donné son e-mail reçoit son manuel en pièce jointe. La page affiche le nombre d'envois réussis et d'échecs.

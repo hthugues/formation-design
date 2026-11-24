@@ -191,8 +191,9 @@ var ORDRE = ["P", "A", "B", "C", "D"];
 function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 function add(parent) { for (var i = 1; i < arguments.length; i++) if (arguments[i]) parent.appendChild(arguments[i]); return parent; }
 function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
-function jeton(cle) {
-  var k = "jeton_" + cle, t = store(k);
+/* Un seul identifiant par participant (par téléphone) : il relie toutes ses réponses dans son manuel. */
+function jeton() {
+  var k = "jeton_participant", t = store(k);
   if (!t) { var a = new Uint8Array(16); crypto.getRandomValues(a); t = Array.prototype.map.call(a, function (x) { return ("0" + x.toString(16)).slice(-2); }).join(""); store(k, t); }
   return t;
 }
@@ -240,6 +241,9 @@ function menu(root) {
     add(a, el("div", "eyebrow", CONF[k].court + " · " + CONF[k].duree), el("h2", null, CONF[k].titre), el("p", null, CONF[k].consigne));
     m.appendChild(a);
   });
+  var man = el("a"); man.href = location.origin + "/manuel"; man.style.borderTopColor = "var(--ocre)";
+  add(man, el("div", "eyebrow", "À la fin de la formation"), el("h2", null, "Mon manuel du participant"), el("p", null, "Le résumé du cours et toutes vos réponses, en PDF : à télécharger ou à recevoir par e-mail."));
+  m.appendChild(man);
   root.appendChild(m);
 }
 
@@ -255,6 +259,10 @@ function identite(form, sansMarque) {
 /* P - Mon projet */
 function formP(form) {
   var c = card(null, "Votre projet");
+  var mail = el("input"); mail.type = "email"; mail.id = "email"; mail.maxLength = 254; mail.placeholder = "prenom@exemple.com"; mail.autocomplete = "email"; mail.value = store("email") || "";
+  var cm = card(null, "Votre adresse e-mail");
+  add(cm, field("Pour recevoir votre manuel du participant", mail), el("p", "hint", "À la fin de la formation, vous recevrez un PDF avec le résumé du cours et toutes vos réponses. Votre adresse n’apparaît jamais sur le mur."));
+  form.appendChild(cm);
   var m = input("marque", "Ex. Épices du Nord", 80); m.value = store("marque") || "";
   add(c, field("Nom de votre projet ou de votre marque", m),
       field("Votre projet en une phrase", area("phraseProjet", "Ex. Une épicerie artisanale d’épices et de vanille de Nosy Be", 200)));
@@ -264,7 +272,7 @@ function formP(form) {
       field("Pourquoi la suivez-vous ?", area("pourquoi", "Ex. leurs photos sont belles, ils répondent vite…", 240)));
   form.appendChild(c2);
 }
-function collectP() { return { phraseProjet: val("phraseProjet"), suivie: val("suivie"), pourquoi: val("pourquoi") }; }
+function collectP() { return { phraseProjet: val("phraseProjet"), suivie: val("suivie"), pourquoi: val("pourquoi"), email: val("email") }; }
 function fillP(d) { setVal("phraseProjet", d.phraseProjet); setVal("suivie", d.suivie); setVal("pourquoi", d.pourquoi); }
 
 /* A - Phrase de positionnement */
@@ -406,7 +414,7 @@ function envoyerPhotos() {
   if (!cles.length) return Promise.resolve(PHOTOS_AVANT);
   var res = {}; if (PHOTOS_AVANT) Object.keys(PHOTOS_AVANT).forEach(function (k) { res[k] = PHOTOS_AVANT[k]; });
   return cles.reduce(function (p, k) {
-    return p.then(function () { return api("/api/photo", { atelier: "C", jeton: jeton("C"), type: k, data: PHOTOS[k] }).then(function () { res[k] = true; }); });
+    return p.then(function () { return api("/api/photo", { atelier: "C", jeton: jeton(), type: k, data: PHOTOS[k] }).then(function () { res[k] = true; }); });
   }, Promise.resolve()).then(function () { res.v = Date.now(); PHOTOS = {}; PHOTOS_AVANT = res; return res; });
 }
 function photoUrl(pid, t, v) { return "/api/photo?a=C&id=" + encodeURIComponent(pid) + "&t=" + t + (v ? "&v=" + v : ""); }
@@ -589,7 +597,7 @@ var minuterie = null;
 function demarrerMur(cible, compteur, etat) {
   function charger() {
     if (MODAL) return;
-    var j = (MUR || PROJ) ? "" : "&jeton=" + jeton(ATELIER);
+    var j = (MUR || PROJ) ? "" : "&jeton=" + jeton();
     api("/api/reponses?atelier=" + ATELIER + j).then(function (l) { dessinerMur(l, cible, compteur); etat.textContent = "Mis à jour à " + heure(); })
       .catch(function () { etat.textContent = "Connexion difficile, nouvel essai…"; });
   }
@@ -647,7 +655,7 @@ function pageAtelier(root) {
     window.scrollTo(0, 0);
   }
   t1.onclick = function () { montrer(false); }; t2.onclick = function () { montrer(true); }; retour.onclick = function () { montrer(false); };
-  api("/api/reponses?atelier=" + ATELIER + "&jeton=" + jeton(ATELIER)).then(function (l) {
+  api("/api/reponses?atelier=" + ATELIER + "&jeton=" + jeton()).then(function (l) {
     var moi = l.filter(function (r) { return r.moi; })[0]; if (!moi) return;
     setVal("nom", moi.nom); setVal("marque", moi.marque); FORMS[ATELIER][2](moi.data || {}, moi);
   }).catch(function () {});
@@ -656,12 +664,14 @@ function pageAtelier(root) {
     var nom = val("nom");
     if (!nom) { msg.className = "msg err"; msg.textContent = "Indiquez votre nom pour qu’il s’affiche sur le mur."; document.getElementById("nom").focus(); return; }
     var data = FORMS[ATELIER][1]();
+    if (ATELIER === "P" && data.email && !/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(data.email)) { msg.className = "msg err"; msg.textContent = "Vérifiez votre adresse e-mail."; document.getElementById("email").focus(); return; }
+    if (ATELIER === "P" && data.email) store("email", data.email);
     if (ATELIER === "D" && analyseD(data).offres > 1) { msg.className = "msg err"; msg.textContent = "Une seule offre commerciale sur les 6 publications : changez le pilier d’une des offres."; return; }
     data.nom = nom; data.marque = val("marque");
     store("nom", nom); if (data.marque) store("marque", data.marque);
     btn.disabled = true; btn.textContent = ATELIER === "C" && Object.keys(PHOTOS).length ? "Envoi des photos…" : "Envoi en cours…";
     var etape = ATELIER === "C" ? envoyerPhotos().then(function (ph) { if (ph) data.photos = ph; }) : Promise.resolve();
-    etape.then(function () { btn.textContent = "Envoi en cours…"; return api("/api/reponses", { atelier: ATELIER, jeton: jeton(ATELIER), reponse: data }); })
+    etape.then(function () { btn.textContent = "Envoi en cours…"; return api("/api/reponses", { atelier: ATELIER, jeton: jeton(), reponse: data }); })
       .then(function (liste) { btn.disabled = false; btn.textContent = "Envoyer et voir le mur"; montrer(true); dessinerMur(liste, grid, cpt); })
       .catch(function (e) { btn.disabled = false; btn.textContent = "Envoyer et voir le mur"; msg.className = "msg err"; msg.textContent = "L’envoi n’a pas abouti (" + e.message + "). Vérifiez votre connexion et réessayez."; });
   };
