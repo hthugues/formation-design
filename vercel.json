@@ -13,10 +13,12 @@
   ],
   "functions": {
     "api/admin.js": {
-      "maxDuration": 60
+      "maxDuration": 60,
+      "includeFiles": "api/_fonts/**"
     },
     "api/manuel.js": {
-      "maxDuration": 30
+      "maxDuration": 30,
+      "includeFiles": "api/_fonts/**"
     }
   }
 }
