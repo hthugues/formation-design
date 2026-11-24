@@ -10,21 +10,23 @@
   :root { --lagon:#0F4C5C; --lagon-deep:#0A3642; --ocre:#E3A23B; --ocre-ink:#8A5D0E; --sable:#FAF7F2; --gres:#E4DED3; --blanc:#FFFDF9; --ink:#2B2D2F; --soft:#5A5F62; }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; background: var(--sable); color: var(--ink); font-family: Inter, Arial, sans-serif; }
-  .page { display: flex; flex-direction: column; height: 100vh; padding: 36px 56px 28px; gap: 18px; }
+  .page { display: flex; flex-direction: column; height: 100vh; padding: 22px 48px 22px; gap: 12px; }
   .eyebrow { font-size: 14px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--ocre-ink); }
-  h1 { font-family: "Playfair Display", Georgia, serif; color: var(--lagon); font-size: 44px; margin: 4px 0 0; line-height: 1.1; }
-  .tools { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; }
-  .box { background: var(--blanc); border-radius: 12px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(15,76,92,.08); }
+  h1 { font-family: "Playfair Display", Georgia, serif; color: var(--lagon); font-size: 28px; margin: 0; line-height: 1.1; }
+  .tools { display: grid; grid-template-columns: 280px 1fr; gap: 12px; align-items: start; }
+  .tools .box, .page > .box { padding: 8px 12px; }
+  .polices .imp { padding: 2px 12px; font-size: 13px; }
+  .box { background: var(--blanc); border-radius: 12px; padding: 10px 14px; box-shadow: 0 1px 3px rgba(15,76,92,.08); }
   label, .lab { display: block; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--soft); margin-bottom: 6px; }
-  textarea { width: 100%; height: 86px; font: inherit; font-size: 18px; padding: 10px 12px; border: 1.5px solid var(--gres); border-radius: 8px; resize: none; }
+  textarea { width: 100%; height: 46px; font: inherit; font-size: 16px; padding: 10px 12px; border: 1.5px solid var(--gres); border-radius: 8px; resize: none; }
   textarea:focus, select:focus { outline: none; border-color: var(--lagon); box-shadow: 0 0 0 3px rgba(15,76,92,.15); }
-  .polices { display: flex; flex-wrap: wrap; gap: 6px; max-height: 130px; overflow-y: auto; }
-  .polices button { border: 1.5px solid var(--gres); background: #fff; border-radius: 20px; padding: 3px 11px; font-size: 17px; cursor: pointer; color: var(--lagon); }
+  .polices { display: flex; flex-wrap: wrap; gap: 6px; max-height: 70px; overflow-y: auto; align-items: center; }
+  .polices button { border: 1.5px solid var(--gres); background: #fff; border-radius: 20px; padding: 2px 10px; font-size: 15px; cursor: pointer; color: var(--lagon); }
   .polices button.on { background: var(--lagon); color: #fff; border-color: var(--lagon); }
-  .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
   .row .lab { margin: 0; }
   .rond { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid var(--lagon); background: #fff; color: var(--lagon); font-weight: 700; cursor: pointer; font-size: 15px; }
-  input[type=range] { width: 200px; accent-color: var(--lagon); }
+  input[type=range] { width: 150px; accent-color: var(--lagon); }
   input[type=color] { width: 40px; height: 34px; border: 1.5px solid var(--gres); border-radius: 6px; padding: 2px; background: #fff; }
   .px { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--lagon); min-width: 64px; }
   .imp { border: 1.5px dashed var(--lagon); color: var(--lagon); background: none; border-radius: 20px; padding: 6px 14px; font: inherit; font-weight: 600; font-size: 14px; cursor: pointer; }
@@ -51,10 +53,7 @@
     <div class="box">
       <div class="lab">Police</div>
       <div class="polices" id="polices"></div>
-      <div class="row">
-        <button class="imp" id="btnImp" type="button">+ Importer une police</button>
-        <input type="file" id="fichier" accept=".ttf,.otf,.woff,.woff2" hidden>
-      </div>
+      <input type="file" id="fichier" accept=".ttf,.otf,.woff,.woff2" hidden>
     </div>
   </div>
   <div class="box">
@@ -64,11 +63,11 @@
       <input type="range" id="taille" min="20" max="400" value="140">
       <button class="rond" id="plus" type="button" title="Plus grand">A+</button>
       <span class="px" id="px">140 px</span>
-      <span class="lab" style="margin-left:18px">Graisse</span>
+      <span class="lab" style="margin-left:8px">Graisse</span>
       <span class="seg" id="graisse"><button type="button" data-w="400" class="on">Normal</button><button type="button" data-w="700">Gras</button></span>
-      <span class="lab" style="margin-left:18px">Texte</span><input type="color" id="cTexte" value="#C8102E">
+      <span class="lab" style="margin-left:8px">Texte</span><input type="color" id="cTexte" value="#C8102E">
       <span class="lab">Fond</span><input type="color" id="cFond" value="#FFFFFF">
-      <span class="seg" id="presets" style="margin-left:12px"><button type="button" data-t="#C8102E" data-f="#FFFFFF">Rouge / blanc</button><button type="button" data-t="#FFFFFF" data-f="#C8102E">Blanc / rouge</button><button type="button" data-t="#0F4C5C" data-f="#FAF7F2">Charte</button><button type="button" data-t="#FFFFFF" data-f="#113CCF">Blanc / bleu</button></span>
+      <span class="seg" id="presets" style="margin-left:6px"><button type="button" data-t="#C8102E" data-f="#FFFFFF">Rouge / blanc</button><button type="button" data-t="#FFFFFF" data-f="#C8102E">Blanc / rouge</button><button type="button" data-t="#0F4C5C" data-f="#FAF7F2">Charte</button><button type="button" data-t="#FFFFFF" data-f="#113CCF">Blanc / bleu</button></span>
     </div>
   </div>
   <div class="afficheur" id="aff"><div class="txt" id="txt"></div><div class="nom" id="nomPolice"></div></div>
@@ -96,12 +95,13 @@ function maj() {
   $("aff").style.background = $("cFond").value;
   $("px").textContent = etat.taille + " px"; $("taille").value = etat.taille;
   $("nomPolice").textContent = etat.police.nom + " · " + etat.police.groupe; $("nomPolice").style.color = $("cTexte").value;
-  Array.prototype.forEach.call($("polices").children, function (b) { b.className = b.dataset.nom === etat.police.nom ? "on" : ""; });
+  Array.prototype.forEach.call($("polices").children, function (b) { if (b.id === "btnImp") return; b.className = b.dataset.nom === etat.police.nom ? "on" : ""; });
 }
 function boutonPolice(p) {
   var b = document.createElement("button"); b.type = "button"; b.textContent = p.nom; b.title = p.groupe; b.dataset.nom = p.nom; b.style.fontFamily = p.css;
-  b.onclick = function () { etat.police = p; maj(); }; $("polices").appendChild(b);
+  b.onclick = function () { etat.police = p; maj(); }; $("polices").insertBefore(b, $("btnImp"));
 }
+(function () { var i = document.createElement("button"); i.type = "button"; i.id = "btnImp"; i.className = "imp"; i.textContent = "+ Importer une police"; $("polices").appendChild(i); })();
 POLICES.forEach(boutonPolice);
 $("texte").oninput = maj;
 $("taille").oninput = function () { etat.taille = +this.value; maj(); };
