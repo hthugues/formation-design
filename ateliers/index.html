@@ -227,7 +227,22 @@ var ORDRE = ["P", "A", "B", "C", "D"];
 /* ---------- petits outils ---------- */
 function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 function add(parent) { for (var i = 1; i < arguments.length; i++) if (arguments[i]) parent.appendChild(arguments[i]); return parent; }
-function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+var MEM = {};
+function lireCookie(k) { var m = document.cookie.match(new RegExp("(?:^|; )fd_" + k + "=([^;]*)")); return m ? decodeURIComponent(m[1]) : null; }
+function store(k, v) {
+  // Mémoire + localStorage + cookie : la valeur survit à l'actualisation, même si un des deux stockages est bloqué.
+  if (v === undefined) {
+    if (MEM[k] != null) return MEM[k];
+    var x = null; try { x = localStorage.getItem(k); } catch (e) {}
+    if (x == null && /^(jeton_participant|nom|marque|email|fait_\w)$/.test(k)) x = lireCookie(k);
+    if (x != null) { MEM[k] = x; try { localStorage.setItem(k, x); } catch (e) {} }
+    return x;
+  }
+  MEM[k] = v;
+  try { localStorage.setItem(k, v); } catch (e) {}
+  if (/^(jeton_participant|nom|marque|email|fait_\w)$/.test(k) && String(v).length < 300) document.cookie = "fd_" + k + "=" + encodeURIComponent(v) + "; max-age=31536000; path=/; SameSite=Lax";
+}
+function oublier(k) { delete MEM[k]; try { localStorage.removeItem(k); } catch (e) {} }
 /* Un seul identifiant par participant (par téléphone) : il relie toutes ses réponses dans son manuel. */
 function jeton() {
   var k = "jeton_participant", t = store(k);
@@ -724,9 +739,25 @@ function pageAtelier(root) {
     window.scrollTo(0, 0);
   }
   t1.onclick = function () { montrer(false); }; t2.onclick = function () { montrer(true); }; retour.onclick = function () { montrer(false); };
+  // Brouillon : tout ce qui est saisi est gardé sur le téléphone, même avant l'envoi.
+  var CLE_B = "brouillon_" + ATELIER, minuteB = null;
+  function lireBrouillon() { try { return JSON.parse(store(CLE_B) || "null"); } catch (e) { return null; } }
+  function sauverBrouillon() {
+    clearTimeout(minuteB);
+    minuteB = setTimeout(function () {
+      try { var d = FORMS[ATELIER][1](); d.nom = val("nom"); d.marque = val("marque"); store(CLE_B, JSON.stringify({ ts: Date.now(), data: d })); } catch (e) {}
+    }, 400);
+  }
+  form.addEventListener("input", sauverBrouillon); form.addEventListener("change", sauverBrouillon);
+  function remplir(d, r) { if (d.nom) setVal("nom", d.nom); if (d.marque) setVal("marque", d.marque); FORMS[ATELIER][2](d, r || {}); }
+  var brouillon = lireBrouillon();
+  if (brouillon && brouillon.data) remplir(brouillon.data);
   api("/api/reponses?atelier=" + ATELIER + "&jeton=" + jeton()).then(function (l) {
     var moi = l.filter(function (r) { return r.moi; })[0]; if (!moi) return;
-    setVal("nom", moi.nom); setVal("marque", moi.marque); FORMS[ATELIER][2](moi.data || {}, moi);
+    store("fait_" + ATELIER, "1");
+    // La réponse envoyée l'emporte, sauf si le brouillon a été modifié après l'envoi.
+    if (brouillon && brouillon.ts > (moi.ts || 0)) { if (ATELIER === "C" && moi.data && moi.data.photos) fillC({ photos: moi.data.photos }, moi); return; }
+    var d = moi.data || {}; d.nom = moi.nom; d.marque = moi.marque; remplir(d, moi);
   }).catch(function () {});
   form.onsubmit = function (ev) {
     ev.preventDefault(); msg.className = "msg";
@@ -741,7 +772,7 @@ function pageAtelier(root) {
     btn.disabled = true; btn.textContent = ATELIER === "C" && Object.keys(PHOTOS).length ? "Envoi des photos…" : "Envoi en cours…";
     var etape = ATELIER === "C" ? envoyerPhotos().then(function (ph) { if (ph) data.photos = ph; }) : Promise.resolve();
     etape.then(function () { btn.textContent = "Envoi en cours…"; return api("/api/reponses", { atelier: ATELIER, jeton: jeton(), reponse: data }); })
-      .then(function (liste) { store("fait_" + ATELIER, "1"); btn.disabled = false; btn.textContent = "Envoyer et voir le mur"; montrer(true); dessinerMur(liste, grid, cpt); })
+      .then(function (liste) { store("fait_" + ATELIER, "1"); oublier(CLE_B); btn.disabled = false; btn.textContent = "Envoyer et voir le mur"; montrer(true); dessinerMur(liste, grid, cpt); })
       .catch(function (e) { btn.disabled = false; btn.textContent = "Envoyer et voir le mur"; msg.className = "msg err"; msg.textContent = "L’envoi n’a pas abouti (" + e.message + "). Vérifiez votre connexion et réessayez."; });
   };
 }

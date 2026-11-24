@@ -43,7 +43,22 @@
 </div>
 <script>
 function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
-function store(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+var MEM = {};
+function lireCookie(k) { var m = document.cookie.match(new RegExp("(?:^|; )fd_" + k + "=([^;]*)")); return m ? decodeURIComponent(m[1]) : null; }
+function store(k, v) {
+  // Mémoire + localStorage + cookie : la valeur survit à l'actualisation, même si un des deux stockages est bloqué.
+  if (v === undefined) {
+    if (MEM[k] != null) return MEM[k];
+    var x = null; try { x = localStorage.getItem(k); } catch (e) {}
+    if (x == null && /^(jeton_participant|nom|marque|email|fait_\w)$/.test(k)) x = lireCookie(k);
+    if (x != null) { MEM[k] = x; try { localStorage.setItem(k, x); } catch (e) {} }
+    return x;
+  }
+  MEM[k] = v;
+  try { localStorage.setItem(k, v); } catch (e) {}
+  if (/^(jeton_participant|nom|marque|email|fait_\w)$/.test(k) && String(v).length < 300) document.cookie = "fd_" + k + "=" + encodeURIComponent(v) + "; max-age=31536000; path=/; SameSite=Lax";
+}
+function oublier(k) { delete MEM[k]; try { localStorage.removeItem(k); } catch (e) {} }
 var J = store("jeton_participant"), zone = document.getElementById("zone");
 var NOMS = { P: "Mon projet", A: "Atelier A", B: "Atelier B", C: "Atelier C", D: "Atelier D" };
 if (!J) {

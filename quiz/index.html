@@ -91,7 +91,22 @@ var MODE = P.get("projection") === "1" ? "projection" : (P.get("resultats") === 
 
 function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
 function add(p) { for (var i = 1; i < arguments.length; i++) if (arguments[i]) p.appendChild(arguments[i]); return p; }
-function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+var MEM = {};
+function lireCookie(k) { var m = document.cookie.match(new RegExp("(?:^|; )fd_" + k + "=([^;]*)")); return m ? decodeURIComponent(m[1]) : null; }
+function store(k, v) {
+  // Mémoire + localStorage + cookie : la valeur survit à l'actualisation, même si un des deux stockages est bloqué.
+  if (v === undefined) {
+    if (MEM[k] != null) return MEM[k];
+    var x = null; try { x = localStorage.getItem(k); } catch (e) {}
+    if (x == null && /^(jeton_participant|nom|marque|email|fait_\w)$/.test(k)) x = lireCookie(k);
+    if (x != null) { MEM[k] = x; try { localStorage.setItem(k, x); } catch (e) {} }
+    return x;
+  }
+  MEM[k] = v;
+  try { localStorage.setItem(k, v); } catch (e) {}
+  if (/^(jeton_participant|nom|marque|email|fait_\w)$/.test(k) && String(v).length < 300) document.cookie = "fd_" + k + "=" + encodeURIComponent(v) + "; max-age=31536000; path=/; SameSite=Lax";
+}
+function oublier(k) { delete MEM[k]; try { localStorage.removeItem(k); } catch (e) {} }
 function jeton() {
   var t = store("jeton_participant");
   if (!t) { var a = new Uint8Array(16); crypto.getRandomValues(a); t = Array.prototype.map.call(a, function (x) { return ("0" + x.toString(16)).slice(-2); }).join(""); store("jeton_participant", t); }
@@ -130,7 +145,7 @@ function participant(root) {
   Promise.all([api("?questions=1"), api("?jeton=" + jeton())]).then(function (r) {
     var questions = r[0], etat = r[1];
     if (etat.moi) resultat(zone, questions, etat.moi.score, etat.moi.corrections, etat.moi.reponses);
-    else formulaire(zone, questions, []);
+    else { var av = []; try { av = JSON.parse(store("brouillon_quiz") || "[]") || []; } catch (e) {} formulaire(zone, questions, av); }
   }).catch(function (e) { zone.appendChild(el("div", "msg err", "Impossible de charger le quiz (" + e.message + "). Vérifiez votre connexion.")); zone.lastChild.style.display = "block"; });
 }
 function formulaire(zone, questions, avant) {
@@ -138,6 +153,7 @@ function formulaire(zone, questions, avant) {
   var choix = avant.slice();
   var c = el("div", "card"), nom = el("input"); nom.type = "text"; nom.id = "nom"; nom.maxLength = 80; nom.placeholder = "Prénom et nom";
   nom.value = store("nom") || "";
+  nom.oninput = function () { store("nom", nom.value.trim()); };
   var lab = el("label", null, "Votre nom"); lab.htmlFor = "nom";
   add(c, lab, nom); zone.appendChild(c);
   questions.forEach(function (q, i) {
@@ -147,7 +163,7 @@ function formulaire(zone, questions, avant) {
     q.options.forEach(function (o, j) {
       var bt = el("button", "opt" + (choix[i] === j + 1 ? " on" : "")); bt.type = "button";
       add(bt, el("span", "n", String(j + 1)), el("span", null, o));
-      bt.onclick = function () { choix[i] = j + 1; opts.forEach(function (x, k) { x.className = "opt" + (k === j ? " on" : ""); }); };
+      bt.onclick = function () { choix[i] = j + 1; store("brouillon_quiz", JSON.stringify(choix)); opts.forEach(function (x, k) { x.className = "opt" + (k === j ? " on" : ""); }); };
       opts.push(bt); b.appendChild(bt);
     });
     zone.appendChild(b);
@@ -161,7 +177,7 @@ function formulaire(zone, questions, avant) {
     for (var i = 0; i < questions.length; i++) if (!choix[i]) { msg.className = "msg err"; msg.textContent = "Il manque la réponse à la question " + (i + 1) + "."; return; }
     store("nom", n); btn.disabled = true; btn.textContent = "Envoi…";
     api("", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ jeton: jeton(), nom: n, reponses: choix }) })
-      .then(function (r) { resultat(zone, questions, r.score, r.corrections, choix); window.scrollTo(0, 0); })
+      .then(function (r) { oublier("brouillon_quiz"); resultat(zone, questions, r.score, r.corrections, choix); window.scrollTo(0, 0); })
       .catch(function (e) { btn.disabled = false; btn.textContent = "Valider mes réponses"; msg.className = "msg err"; msg.textContent = "L’envoi n’a pas abouti (" + e.message + "). Réessayez."; });
   };
 }
