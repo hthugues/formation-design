@@ -1,9 +1,11 @@
-// Ateliers en ligne : enregistrement et lecture des réponses (B, C, D).
+// Ateliers en ligne : enregistrement et lecture des réponses (P, A, B, C, D).
 // GET  /api/reponses?atelier=B[&jeton=...][&mien=1]  -> le mur (ou la réponse du participant)
 // POST /api/reponses  { atelier, jeton, reponse }      -> enregistre ou met à jour, renvoie le mur
+import { createHash } from "node:crypto";
 import { Redis } from "@upstash/redis";
 
-const ATELIERS = ["B", "C", "D"];
+export const ATELIERS = ["P", "A", "B", "C", "D"];
+export const pid = (jeton) => createHash("sha256").update(String(jeton)).digest("hex").slice(0, 16);
 const JETON = /^[a-f0-9]{32}$/;
 const MAX_PAR_ATELIER = 300;
 const MAX_TAILLE = 8000;
@@ -26,7 +28,7 @@ export async function lireMur(atelier, jeton) {
       if (typeof r === "string") {
         try { r = JSON.parse(r); } catch { r = {}; }
       }
-      return { ts: r.ts || 0, nom: r.nom || "", marque: r.marque || "", data: r.data || {}, moi: !!jeton && cle === jeton };
+      return { ts: r.ts || 0, nom: r.nom || "", marque: r.marque || "", data: r.data || {}, pid: pid(cle), moi: !!jeton && cle === jeton };
     })
     .sort((a, b) => b.ts - a.ts);
 }

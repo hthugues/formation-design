@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Écrire avec une police - Identité visuelle &amp; Marketing digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yellowtail&family=Lobster&family=Pacifico&family=Princess+Sofia&family=Grand+Hotel&family=Dancing+Script:wght@400;700&family=Bebas+Neue&family=Comic+Neue:wght@400;700&family=Montserrat:wght@400;700&family=Playfair+Display:wght@400;700&family=Inter:wght@400;600;700&display=swap">
+<style>
+  :root { --lagon:#0F4C5C; --lagon-deep:#0A3642; --ocre:#E3A23B; --ocre-ink:#8A5D0E; --sable:#FAF7F2; --gres:#E4DED3; --blanc:#FFFDF9; --ink:#2B2D2F; --soft:#5A5F62; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--sable); color: var(--ink); font-family: Inter, Arial, sans-serif; }
+  .page { display: flex; flex-direction: column; height: 100vh; padding: 36px 56px 28px; gap: 18px; }
+  .eyebrow { font-size: 14px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--ocre-ink); }
+  h1 { font-family: "Playfair Display", Georgia, serif; color: var(--lagon); font-size: 44px; margin: 4px 0 0; line-height: 1.1; }
+  .tools { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; }
+  .box { background: var(--blanc); border-radius: 12px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(15,76,92,.08); }
+  label, .lab { display: block; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--soft); margin-bottom: 6px; }
+  textarea { width: 100%; height: 86px; font: inherit; font-size: 18px; padding: 10px 12px; border: 1.5px solid var(--gres); border-radius: 8px; resize: none; }
+  textarea:focus, select:focus { outline: none; border-color: var(--lagon); box-shadow: 0 0 0 3px rgba(15,76,92,.15); }
+  .polices { display: flex; flex-wrap: wrap; gap: 6px; max-height: 130px; overflow-y: auto; }
+  .polices button { border: 1.5px solid var(--gres); background: #fff; border-radius: 20px; padding: 3px 11px; font-size: 17px; cursor: pointer; color: var(--lagon); }
+  .polices button.on { background: var(--lagon); color: #fff; border-color: var(--lagon); }
+  .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .row .lab { margin: 0; }
+  .rond { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid var(--lagon); background: #fff; color: var(--lagon); font-weight: 700; cursor: pointer; font-size: 15px; }
+  input[type=range] { width: 200px; accent-color: var(--lagon); }
+  input[type=color] { width: 40px; height: 34px; border: 1.5px solid var(--gres); border-radius: 6px; padding: 2px; background: #fff; }
+  .px { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--lagon); min-width: 64px; }
+  .imp { border: 1.5px dashed var(--lagon); color: var(--lagon); background: none; border-radius: 20px; padding: 6px 14px; font: inherit; font-weight: 600; font-size: 14px; cursor: pointer; }
+  .note { font-size: 13px; color: var(--soft); margin-top: 6px; }
+  .afficheur { flex: 1; min-height: 0; border-radius: 16px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 24px 40px; position: relative; box-shadow: inset 0 0 0 1.5px var(--gres); }
+  .afficheur .txt { white-space: pre-wrap; text-align: center; line-height: 1.15; word-break: break-word; }
+  .afficheur .nom { position: absolute; left: 16px; bottom: 12px; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; opacity: .55; }
+  .seg button { border: 1.5px solid var(--gres); background: #fff; padding: 5px 10px; cursor: pointer; font-weight: 700; color: var(--lagon); }
+  .seg button:first-child { border-radius: 8px 0 0 8px; } .seg button:last-child { border-radius: 0 8px 8px 0; }
+  .seg button.on { background: var(--lagon); color: #fff; border-color: var(--lagon); }
+</style>
+</head>
+<body>
+<div class="page">
+  <div>
+    <div class="eyebrow">Module 2 · Typographie</div>
+    <h1>Écrire avec une police</h1>
+  </div>
+  <div class="tools">
+    <div class="box">
+      <label for="texte">Votre texte</label>
+      <textarea id="texte" maxlength="200">Épices du Nord</textarea>
+    </div>
+    <div class="box">
+      <div class="lab">Police</div>
+      <div class="polices" id="polices"></div>
+      <div class="row">
+        <button class="imp" id="btnImp" type="button">+ Importer une police</button>
+        <input type="file" id="fichier" accept=".ttf,.otf,.woff,.woff2" hidden>
+      </div>
+    </div>
+  </div>
+  <div class="box">
+    <div class="row" style="margin-top:0">
+      <span class="lab">Taille</span>
+      <button class="rond" id="moins" type="button" title="Plus petit">A−</button>
+      <input type="range" id="taille" min="20" max="400" value="140">
+      <button class="rond" id="plus" type="button" title="Plus grand">A+</button>
+      <span class="px" id="px">140 px</span>
+      <span class="lab" style="margin-left:18px">Graisse</span>
+      <span class="seg" id="graisse"><button type="button" data-w="400" class="on">Normal</button><button type="button" data-w="700">Gras</button></span>
+      <span class="lab" style="margin-left:18px">Texte</span><input type="color" id="cTexte" value="#C8102E">
+      <span class="lab">Fond</span><input type="color" id="cFond" value="#FFFFFF">
+      <span class="seg" id="presets" style="margin-left:12px"><button type="button" data-t="#C8102E" data-f="#FFFFFF">Rouge / blanc</button><button type="button" data-t="#FFFFFF" data-f="#C8102E">Blanc / rouge</button><button type="button" data-t="#0F4C5C" data-f="#FAF7F2">Charte</button><button type="button" data-t="#FFFFFF" data-f="#113CCF">Blanc / bleu</button></span>
+    </div>
+  </div>
+  <div class="afficheur" id="aff"><div class="txt" id="txt"></div><div class="nom" id="nomPolice"></div></div>
+</div>
+<script>
+var POLICES = [
+  { nom: "Yellowtail", css: "Yellowtail, cursive", groupe: "Script rétro, style Coca-Cola" },
+  { nom: "Lobster", css: "Lobster, cursive", groupe: "Script rétro, style Coca-Cola" },
+  { nom: "Pacifico", css: "Pacifico, cursive", groupe: "Script rétro" },
+  { nom: "Princess Sofia", css: "'Princess Sofia', cursive", groupe: "Conte de fées, style Disney" },
+  { nom: "Grand Hotel", css: "'Grand Hotel', cursive", groupe: "Script élégant" },
+  { nom: "Dancing Script", css: "'Dancing Script', cursive", groupe: "Manuscrite" },
+  { nom: "Playfair Display", css: "'Playfair Display', serif", groupe: "Avec empattements" },
+  { nom: "Montserrat", css: "Montserrat, sans-serif", groupe: "Sans empattements" },
+  { nom: "Inter", css: "Inter, sans-serif", groupe: "Sans empattements" },
+  { nom: "Bebas Neue", css: "'Bebas Neue', sans-serif", groupe: "Affiche" },
+  { nom: "Comic Neue", css: "'Comic Neue', cursive", groupe: "À éviter pour une marque" }
+];
+var etat = { police: POLICES[0], taille: 140, graisse: 400 };
+var $ = function (id) { return document.getElementById(id); };
+function maj() {
+  var t = $("txt");
+  t.textContent = $("texte").value || " ";
+  t.style.fontFamily = etat.police.css; t.style.fontSize = etat.taille + "px"; t.style.fontWeight = etat.graisse; t.style.color = $("cTexte").value;
+  $("aff").style.background = $("cFond").value;
+  $("px").textContent = etat.taille + " px"; $("taille").value = etat.taille;
+  $("nomPolice").textContent = etat.police.nom + " · " + etat.police.groupe; $("nomPolice").style.color = $("cTexte").value;
+  Array.prototype.forEach.call($("polices").children, function (b) { b.className = b.dataset.nom === etat.police.nom ? "on" : ""; });
+}
+function boutonPolice(p) {
+  var b = document.createElement("button"); b.type = "button"; b.textContent = p.nom; b.title = p.groupe; b.dataset.nom = p.nom; b.style.fontFamily = p.css;
+  b.onclick = function () { etat.police = p; maj(); }; $("polices").appendChild(b);
+}
+POLICES.forEach(boutonPolice);
+$("texte").oninput = maj;
+$("taille").oninput = function () { etat.taille = +this.value; maj(); };
+$("moins").onclick = function () { etat.taille = Math.max(20, etat.taille - 10); maj(); };
+$("plus").onclick = function () { etat.taille = Math.min(400, etat.taille + 10); maj(); };
+$("cTexte").oninput = maj; $("cFond").oninput = maj;
+Array.prototype.forEach.call($("graisse").children, function (b) {
+  b.onclick = function () { etat.graisse = +b.dataset.w; Array.prototype.forEach.call($("graisse").children, function (x) { x.className = x === b ? "on" : ""; }); maj(); };
+});
+Array.prototype.forEach.call($("presets").children, function (b) {
+  b.onclick = function () { $("cTexte").value = b.dataset.t; $("cFond").value = b.dataset.f; maj(); };
+});
+$("btnImp").onclick = function () { $("fichier").click(); };
+$("fichier").onchange = function () {
+  var f = this.files && this.files[0]; if (!f) return;
+  var nom = f.name.replace(/\.[^.]+$/, "").replace(/[^\w\- ]/g, " ").trim() || "Police importée";
+  f.arrayBuffer().then(function (buf) { return new FontFace("Imp-" + Date.now(), buf).load(); })
+    .then(function (face) { document.fonts.add(face); var p = { nom: nom, css: "'" + face.family + "'", groupe: "Police importée" }; POLICES.push(p); boutonPolice(p); etat.police = p; maj(); })
+    .catch(function () { alert("Ce fichier n’a pas pu être lu comme une police (.ttf, .otf, .woff ou .woff2)."); });
+};
+/* Grand écran : agrandir la page */
+function zoom() { document.documentElement.style.zoom = Math.max(1, Math.min(2.2, window.innerWidth / 1150)); document.querySelector(".page").style.height = (window.innerHeight / parseFloat(document.documentElement.style.zoom)) + "px"; }
+zoom(); window.addEventListener("resize", zoom);
+/* Dans la présentation : les flèches restent à la présentation, sauf pendant la saisie */
+if (window.parent !== window) {
+  document.addEventListener("keydown", function (ev) {
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(ev.target.tagName)) return;
+    try { window.parent.dispatchEvent(new KeyboardEvent("keydown", { key: ev.key, code: ev.code, bubbles: true })); ev.preventDefault(); } catch (e) {}
+  });
+}
+document.fonts && document.fonts.ready.then(maj);
+maj();
+</script>
+</body>
+</html>

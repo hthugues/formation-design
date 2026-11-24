@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Composer : laisser respirer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700;800&family=Lobster&family=Bebas+Neue&display=swap">
+<style>
+  :root { --lagon:#0F4C5C; --lagon-deep:#0A3642; --ocre:#E3A23B; --ocre-ink:#8A5D0E; --sable:#FAF7F2; --gres:#E4DED3; --blanc:#FFFDF9; --ink:#2B2D2F; --soft:#5A5F62; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--sable); color: var(--ink); font-family: Inter, Arial, sans-serif; }
+  .page { display: grid; grid-template-columns: 1fr 430px; gap: 56px; padding: 30px 64px; align-items: center; min-height: 100vh; }
+  .eyebrow { font-size: 15px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--ocre-ink); }
+  h1 { font-family: "Playfair Display", Georgia, serif; color: var(--lagon); font-size: 46px; margin: 6px 0 22px; line-height: 1.1; }
+  .regles { display: flex; flex-direction: column; gap: 12px; }
+  .regle { display: flex; align-items: center; gap: 16px; text-align: left; font: inherit; font-size: 24px; padding: 11px 18px; border-radius: 14px; border: 2px solid var(--gres); background: var(--blanc); color: var(--ink); cursor: pointer; transition: all .25s; }
+  .regle .case { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--lagon); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; transition: all .25s; }
+  .regle.on { border-color: var(--lagon); background: #E9F1F3; color: var(--lagon); font-weight: 600; }
+  .regle.on .case { background: var(--lagon); }
+  .regle .n { font-family: "Playfair Display", Georgia, serif; font-weight: 700; color: var(--ocre-ink); }
+  .actions { display: flex; gap: 12px; margin-top: 18px; }
+  .actions button { font: inherit; font-size: 17px; font-weight: 700; border-radius: 30px; padding: 10px 20px; cursor: pointer; border: 2px solid var(--lagon); }
+  .tout { background: var(--lagon); color: #fff; }
+  .zero { background: none; color: var(--lagon); }
+  .astuce { margin-top: 18px; font-size: 18px; color: var(--soft); }
+  /* Affiche */
+  .flyer { width: 430px; height: 600px; position: relative; overflow: hidden; display: flex; flex-direction: column; transition: all .5s ease; }
+  .flyer > * { transition: all .5s ease; }
+  .f-titre, .f-sous, .f-prix, .f-promo, .f-infos, .f-livr, .f-vite, .f-tel, .f-etoile { margin: 0; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div>
+    <div class="eyebrow">Module 2 · Composition</div>
+    <h1>Composer : laisser respirer</h1>
+    <div class="regles" id="regles"></div>
+    <div class="actions"><button class="tout" id="tout" type="button">Tout appliquer</button><button class="zero" id="zero" type="button">Revenir au départ</button></div>
+    <div class="astuce">Cliquez sur une règle : l’affiche change en direct.</div>
+  </div>
+  <div class="flyer" id="flyer" aria-live="polite"></div>
+</div>
+<script>
+var REGLES = [
+  { id: "superflu", txt: "Gommez le superflu" },
+  { id: "aligner", txt: "Alignez" },
+  { id: "espaces", txt: "Égalisez les espaces" },
+  { id: "marges", txt: "Laissez des marges" },
+  { id: "essentiel", txt: "Faites sortir l’essentiel" }
+];
+var on = {};
+function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
+
+function dessiner() {
+  var f = document.getElementById("flyer"), S = on.superflu, A = on.aligner, E = on.espaces, M = on.marges, K = on.essentiel;
+  f.textContent = "";
+  // Fond et cadre
+  f.style.background = K ? "#0F4C5C" : (S ? "#FFF6D6" : "#FFF36B");
+  f.style.borderRadius = K || M ? "18px" : "4px";
+  f.style.boxShadow = S ? "0 0 0 1.5px #E4DED3" : "0 0 0 6px #E5322D";
+  f.style.padding = M ? "56px 48px" : "10px 8px";
+  f.style.alignItems = A ? "flex-start" : "center";
+  f.style.textAlign = A ? "left" : "center";
+  f.style.justifyContent = E ? "flex-start" : "space-between";
+  f.style.gap = E ? "22px" : "0";
+
+  var clair = K ? "#FAF7F2" : "#2B2D2F", accent = K ? "#E3A23B" : "#E5322D";
+  var elems = [];
+  function item(cls, txt, styleNormal, styleFinal, garder) {
+    if (S && !garder) return;
+    var e = el("p", cls, txt), st = K ? styleFinal : styleNormal;
+    for (var k in st) e.style[k] = st[k];
+    if (!E) e.style.margin = ([4, 14, 0, 10, 2, 16, 6, 12, 0][elems.length % 9]) + "px 0";
+    elems.push(e);
+  }
+  var titreNormal = S ? "La vanille, directement du producteur" : "GRANDE PROMO !!!";
+  item("f-etoile", "★ NOUVEAU ★ NOUVEAU ★", { color: "#1E88E5", fontWeight: "800", fontSize: "18px", fontFamily: "'Bebas Neue', sans-serif" }, {}, false);
+  item("f-titre", titreNormal,
+       S ? { color: "#0F4C5C", fontSize: "40px", fontWeight: "700", fontFamily: "'Playfair Display', serif", lineHeight: "1.15" }
+         : { color: "#D81B60", fontSize: "46px", fontWeight: "800", fontFamily: "Lobster, cursive", lineHeight: "1.05", textShadow: "2px 2px 0 #1E88E5" },
+       { color: "#FAF7F2", fontSize: "44px", fontWeight: "700", fontFamily: "'Playfair Display', serif", lineHeight: "1.15" }, true);
+  item("f-sous", "Épices · Vanille · Rhum · Huiles", { color: "#1E88E5", fontSize: "24px", fontWeight: "600", fontFamily: S ? "Inter, sans-serif" : "'Bebas Neue', sans-serif" },
+       { color: "#C9DCE0", fontSize: "20px", fontWeight: "500", fontFamily: "Inter, sans-serif" }, true);
+  item("f-prix", "Prix imbattables", { color: "#43A047", fontSize: "30px", fontStyle: "italic", fontWeight: "700" }, {}, false);
+  item("f-promo", "−20 % cette semaine", { color: S ? "#2B2D2F" : "#8E24AA", fontSize: S ? "22px" : "26px", fontWeight: "700", fontFamily: "Inter, sans-serif" },
+       { color: "#0A3642", background: "#E3A23B", fontSize: "34px", fontWeight: "800", fontFamily: "Inter, sans-serif", padding: "10px 18px", borderRadius: "10px" }, true);
+  item("f-livr", "Livraison · Cartes cadeaux · Facebook · Instagram", { color: "#3949AB", fontSize: "18px" }, {}, false);
+  item("f-infos", "Lun - sam · 8 h - 18 h", { color: S ? "#5A5F62" : "#00897B", fontSize: "20px", fontWeight: S ? "500" : "700" }, { color: "#C9DCE0", fontSize: "19px", fontWeight: "500" }, true);
+  item("f-tel", "034 00 000 00", { color: S ? "#5A5F62" : "#E5322D", fontSize: S ? "20px" : "28px", fontWeight: "800" }, { color: "#C9DCE0", fontSize: "19px", fontWeight: "500" }, true);
+  item("f-vite", "VENEZ VITE !!!", { color: "#FB8C00", fontSize: "38px", fontWeight: "800", fontFamily: "'Bebas Neue', sans-serif" }, {}, false);
+
+  // Désordre de départ : rotations légères
+  if (!A) elems.forEach(function (e, i) { e.style.transform = "rotate(" + ([-4, 3, -2, 5, -3, 2, -5, 4, -2][i % 9]) + "deg)"; });
+  if (K && E) { var sp = el("div"); sp.style.flex = "1"; elems.splice(elems.length - 2, 0, sp); }
+  elems.forEach(function (e) { f.appendChild(e); });
+}
+function regles() {
+  var box = document.getElementById("regles"); box.textContent = "";
+  REGLES.forEach(function (r, i) {
+    var b = el("button", "regle" + (on[r.id] ? " on" : "")); b.type = "button";
+    var c = el("span", "case", on[r.id] ? "✓" : ""), n = el("span", "n", String(i + 1)), t = el("span", null, r.txt);
+    b.appendChild(c); b.appendChild(n); b.appendChild(t);
+    b.onclick = function () { on[r.id] = !on[r.id]; regles(); dessiner(); };
+    box.appendChild(b);
+  });
+}
+document.getElementById("tout").onclick = function () { REGLES.forEach(function (r) { on[r.id] = true; }); regles(); dessiner(); };
+document.getElementById("zero").onclick = function () { on = {}; regles(); dessiner(); };
+function zoom() { var z = Math.max(0.6, Math.min(2, window.innerWidth / 1200, window.innerHeight / 700)); document.documentElement.style.zoom = z; document.querySelector(".page").style.minHeight = (window.innerHeight / z) + "px"; }
+zoom(); window.addEventListener("resize", zoom);
+if (window.parent !== window) {
+  document.addEventListener("keydown", function (ev) {
+    try { window.parent.dispatchEvent(new KeyboardEvent("keydown", { key: ev.key, code: ev.code, bubbles: true })); ev.preventDefault(); } catch (e) {}
+  });
+}
+regles(); dessiner();
+</script>
+</body>
+</html>

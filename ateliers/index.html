@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ateliers en ligne - Identité visuelle &amp; Marketing digital</title>
-<meta charset="utf-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap">
 <style>
@@ -15,8 +15,9 @@
   * { box-sizing: border-box; }
   html, body { margin: 0; background: var(--sable); color: var(--ink); font-family: Inter, Arial, sans-serif; font-size: 17px; line-height: 1.45; }
   h1, h2, h3 { font-family: "Playfair Display", Georgia, serif; color: var(--lagon); margin: 0; }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 24px 18px 80px; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 20px 18px 80px; }
   .wrap.large { max-width: 1600px; }
+  .back { display: inline-block; color: var(--lagon); font-weight: 600; text-decoration: none; font-size: 15px; margin-bottom: 14px; }
   .eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--ocre-ink); }
   .top h1 { font-size: 34px; line-height: 1.1; margin-top: 6px; }
   .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
@@ -41,7 +42,6 @@
   .counter { text-align: right; font-size: 13px; color: var(--soft); margin-top: 4px; }
   .counter.over { color: var(--ko); font-weight: 600; }
   .post-row { border-top: 1px solid var(--gres); padding-top: 10px; margin-top: 10px; }
-  .post-row .row3 { grid-template-columns: 1fr 1fr 1fr; }
   .checks { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
   .check { font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 20px; background: var(--gres); color: var(--ink); }
   .check.ok { background: #DFF0E5; color: var(--ok); }
@@ -51,21 +51,30 @@
   .btn.ghost { background: none; color: var(--lagon); border: 2px solid var(--lagon); }
   .msg { margin-top: 12px; padding: 12px 14px; border-radius: 6px; display: none; }
   .msg.err { display: block; background: #FBE4E1; color: var(--ko); }
-  .msg.ok { display: block; background: #DFF0E5; color: var(--ok); }
-  .menu a { display: block; text-decoration: none; background: var(--blanc); border-top: 5px solid var(--lagon); padding: 22px; margin-bottom: 14px; border-radius: 6px; color: var(--ink); }
-  .menu a h2 { font-size: 26px; }
+  .preview-phrase { margin-top: 14px; background: var(--sable); border-left: 4px solid var(--ocre); padding: 12px 14px; font-family: "Playfair Display", Georgia, serif; font-size: 19px; color: var(--lagon); }
+  .preview-phrase .vide { color: #A6A9AB; }
+  .preview-phrase b { color: var(--ocre-ink); }
+  .upload { display: grid; grid-template-columns: 84px 1fr; gap: 12px; align-items: center; margin-top: 10px; }
+  .upload .thumb { width: 84px; height: 84px; border-radius: 8px; background: var(--gres) center / cover no-repeat; border: 1.5px dashed #B9B2A6; }
+  .upload .thumb.round { border-radius: 50%; }
+  .upload .thumb.wide { width: 84px; height: 48px; }
+  .upload input[type=file] { font-size: 14px; }
+  .menu a { display: block; text-decoration: none; background: var(--blanc); border-top: 5px solid var(--lagon); padding: 20px; margin-bottom: 14px; border-radius: 6px; color: var(--ink); }
+  .menu a h2 { font-size: 24px; }
   .menu a p { margin: 6px 0 0; color: var(--soft); }
   /* Mur */
   .wall-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 12px; }
   .wall-head .count { font-weight: 700; color: var(--lagon); }
   .wall-head .live { font-size: 13px; color: var(--soft); }
   .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-  .large .grid { grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); }
-  .resp { background: var(--blanc); border-radius: 8px; padding: 18px; border-top: 5px solid var(--lagon); box-shadow: 0 1px 3px rgba(15,76,92,.08); }
+  .large .grid { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+  .resp { position: relative; background: var(--blanc); border-radius: 8px; padding: 18px; border-top: 5px solid var(--lagon); box-shadow: 0 1px 3px rgba(15,76,92,.08); }
   .resp.moi { border-top-color: var(--ocre); box-shadow: 0 0 0 2px var(--ocre); }
-  .resp .who { font-family: "Playfair Display", Georgia, serif; font-size: 22px; font-weight: 700; color: var(--lagon); }
+  .resp .who { font-family: "Playfair Display", Georgia, serif; font-size: 22px; font-weight: 700; color: var(--lagon); padding-right: 96px; }
   .resp .brand { color: var(--ocre-ink); font-weight: 600; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
-  .resp .you { float: right; background: var(--ocre); color: var(--lagon-deep); font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+  .resp .tools { position: absolute; top: 14px; right: 14px; display: flex; gap: 6px; align-items: center; }
+  .resp .you { background: var(--ocre); color: var(--lagon-deep); font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+  .zoom-btn { background: var(--blanc); color: var(--lagon); border: 1.5px solid var(--lagon); border-radius: 20px; font: inherit; font-size: 12px; font-weight: 700; padding: 3px 10px; cursor: pointer; }
   .resp .k { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--soft); margin: 14px 0 6px; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chip { background: var(--gres); border-radius: 20px; padding: 3px 12px; font-size: 14px; }
@@ -74,14 +83,9 @@
   .sw .nm { font-size: 13px; font-weight: 600; margin-top: 4px; }
   .sw .hx { font-size: 12px; color: var(--soft); }
   .fonts .f1 { font-size: 20px; font-weight: 700; color: var(--lagon); }
-  .fonts .f2 { font-size: 15px; }
-  .phone { border: 3px solid var(--lagon); border-radius: 22px; padding: 12px; margin-top: 12px; background: #fff; }
-  .phone .canal { display: inline-block; background: var(--lagon-soft); color: var(--lagon-deep); font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 20px; }
-  .phone .pname { font-weight: 700; font-size: 17px; margin-top: 8px; }
-  .phone .bio { font-size: 14px; margin-top: 4px; }
-  .phone .coord { font-size: 13px; color: var(--soft); margin-top: 6px; }
-  .phone .cta { display: block; text-align: center; background: var(--lagon); color: var(--sable); border-radius: 20px; padding: 7px; font-size: 14px; font-weight: 600; margin-top: 10px; }
-  .phone .desc { font-size: 13px; color: var(--soft); margin-top: 8px; }
+  .phrase { font-family: "Playfair Display", Georgia, serif; font-size: 19px; line-height: 1.4; color: var(--lagon); margin-top: 10px; }
+  .phrase b { color: var(--ocre-ink); }
+  .quote { margin-top: 10px; font-size: 15px; }
   .plan { width: 100%; border-collapse: collapse; font-size: 14px; }
   .plan td { padding: 6px 4px; border-top: 1px solid var(--gres); vertical-align: top; }
   .plan .pil { font-size: 12px; font-weight: 700; border-radius: 12px; padding: 2px 8px; white-space: nowrap; display: inline-block; }
@@ -95,21 +99,72 @@
   .postbox .cta2 { font-weight: 600; color: var(--lagon); margin-top: 6px; }
   .empty { text-align: center; color: var(--soft); padding: 40px 10px; }
   .large .top h1 { font-size: 44px; }
-  .large .resp .who { font-size: 26px; }
-  .proj { display: grid; grid-template-columns: 360px 1fr; gap: 40px; align-items: start; }
-  .qrbox { position: sticky; top: 24px; background: var(--blanc); border-top: 6px solid var(--ocre); border-radius: 8px; padding: 28px; text-align: center; }
-  .qrbox svg { width: 100%; height: auto; display: block; }
-  .qrbox .go { font-family: "Playfair Display", Georgia, serif; font-size: 26px; color: var(--lagon); font-weight: 700; margin-bottom: 14px; }
-  .qrbox .url { font-size: 20px; font-weight: 700; color: var(--lagon); margin-top: 14px; word-break: break-all; }
-  .qrbox .then { font-size: 16px; color: var(--soft); margin-top: 6px; }
-  .proj .grid { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
   .hidden { display: none !important; }
-  @media (max-width: 480px) { .row3 { grid-template-columns: 1fr; } .post-row .row3 { grid-template-columns: 1fr 1fr; } }
+  /* Profils par canal */
+  .pf { margin-top: 12px; border-radius: 14px; overflow: hidden; border: 1px solid #DADDE1; background: #fff; font-family: Arial, Helvetica, sans-serif; color: #1C1E21; }
+  .pf .cover { height: 110px; background: #CFD8DC center / cover no-repeat; display: flex; align-items: center; justify-content: center; color: #555; font-size: 12px; text-align: center; padding: 6px; }
+  .pf .av { width: 76px; height: 76px; border-radius: 50%; background: #B0BEC5 center / cover no-repeat; border: 4px solid #fff; flex-shrink: 0; }
+  .pf .nm { font-weight: 700; font-size: 18px; }
+  .pf .sub { color: #65676B; font-size: 13px; }
+  .pf .bio { font-size: 14px; margin-top: 6px; white-space: pre-line; }
+  .pf .info { font-size: 13px; color: #65676B; margin-top: 6px; }
+  .pf .act { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .pf .act span { flex: 1; text-align: center; border-radius: 8px; padding: 7px 8px; font-size: 13px; font-weight: 700; background: #E4E6EB; color: #1C1E21; }
+  .pf .posts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-top: 10px; }
+  .pf .posts div { aspect-ratio: 1; background: #ECEFF1 center / cover no-repeat; }
+  .pf .body { padding: 10px 14px 14px; }
+  .pf-fb .head { display: flex; align-items: flex-end; gap: 10px; margin-top: -38px; }
+  .pf-fb .act span.main { background: #1877F2; color: #fff; }
+  .pf-gg { font-family: Arial, sans-serif; }
+  .pf-gg .cover { height: 130px; }
+  .pf-gg .nm { font-size: 20px; font-weight: 400; }
+  .pf-gg .act span { background: #fff; border: 1px solid #DADCE0; color: #1A73E8; border-radius: 18px; }
+  .pf-gg .act span.main { background: #1A73E8; color: #fff; border-color: #1A73E8; }
+  .pf-gg .tag { display: inline-block; font-size: 11px; font-weight: 700; color: #1A73E8; letter-spacing: .5px; margin-bottom: 4px; }
+  .pf-wa .bar { background: #075E54; color: #fff; font-size: 13px; font-weight: 700; padding: 8px 12px; }
+  .pf-wa .center { text-align: center; padding: 14px 14px 0; }
+  .pf-wa .av { width: 96px; height: 96px; margin: 0 auto; border-color: #fff; }
+  .pf-wa .badge { color: #008069; font-size: 12px; font-weight: 700; }
+  .pf-wa .act span.main { background: #25D366; color: #fff; }
+  .pf-wa .cat { font-size: 12px; font-weight: 700; color: #008069; margin-top: 10px; }
+  .pf-ig .head { display: flex; align-items: center; gap: 16px; padding: 14px 14px 0; }
+  .pf-ig .ring { padding: 3px; border-radius: 50%; background: linear-gradient(45deg, #F9CE34, #EE2A7B, #6228D7); }
+  .pf-ig .av { border-width: 3px; }
+  .pf-ig .stats { display: flex; gap: 16px; font-size: 13px; text-align: center; }
+  .pf-ig .stats b { display: block; font-size: 16px; }
+  .pf-ig .act span.main { background: #0095F6; color: #fff; }
+  .pf-tt { background: #121212; color: #fff; border-color: #333; }
+  .pf-tt .center { text-align: center; padding: 16px 14px 0; }
+  .pf-tt .av { width: 92px; height: 92px; margin: 0 auto; border-color: #121212; }
+  .pf-tt .sub, .pf-tt .info { color: #A8A8A8; }
+  .pf-tt .act span { background: #2F2F2F; color: #fff; }
+  .pf-tt .act span.main { background: #FE2C55; }
+  .pf-tt .posts div { aspect-ratio: 3 / 4; background-color: #2A2A2A; }
+  .pf .desc { font-size: 12px; color: #8A8D91; margin-top: 6px; }
+  /* Agrandir */
+  .modal { position: fixed; inset: 0; z-index: 50; background: rgba(10, 54, 66, .78); display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .modal .box { position: relative; background: var(--sable); border-radius: 14px; width: min(1100px, 100%); max-height: 100%; overflow-y: auto; padding: 28px 32px; }
+  .modal .resp { box-shadow: none; font-size: 22px; padding: 0; background: none; border: none; }
+  .modal .resp .who { font-size: 40px; padding-right: 0; }
+  .modal .resp .brand { font-size: 18px; }
+  .modal .resp .k { font-size: 15px; }
+  .modal .chip { font-size: 20px; padding: 5px 16px; }
+  .modal .sw .box { height: 110px; }
+  .modal .sw .nm { font-size: 18px; }
+  .modal .fonts .f1 { font-size: 34px; }
+  .modal .phrase { font-size: 34px; }
+  .modal .plan { font-size: 20px; }
+  .modal .postbox { font-size: 21px; }
+  .modal .pf { max-width: 560px; margin-left: auto; margin-right: auto; font-size: 18px; }
+  .modal .tools, .modal .zoom-btn { display: none; }
+  .modal .nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .modal .nav button { background: var(--lagon); color: #fff; border: none; border-radius: 30px; padding: 10px 18px; font: inherit; font-weight: 700; cursor: pointer; }
+  .modal .nav .pos { color: var(--soft); font-weight: 600; }
+  @media (max-width: 480px) { .row3 { grid-template-columns: 1fr; } .post-row .row3 { grid-template-columns: 1fr 1fr; } .modal { padding: 8px; } .modal .box { padding: 18px; } }
 </style>
 </head>
 <body>
 <div class="wrap" id="app"></div>
-
 <script src="/ateliers/qrcode.js"></script>
 <script>
 var PARAMS = new URLSearchParams(location.search);
@@ -119,31 +174,26 @@ var PROJ = PARAMS.get("projection") === "1";
 var BASE = location.origin + "/ateliers";
 
 var CONF = {
-  B: { titre: "Ma mini-charte express", duree: "13 min", module: "Identité visuelle",
+  P: { titre: "Mon projet", duree: "5 min", module: "Votre projet", court: "Atelier de départ",
+       consigne: "Présentez votre projet : il vous servira d’exemple dans tous les ateliers suivants. Dites-nous aussi quelle marque vous suivez en ligne, et pourquoi." },
+  A: { titre: "Ma phrase de positionnement", duree: "10 min", module: "Identité visuelle", court: "Atelier A",
+       consigne: "Complétez les 5 morceaux de la formule pour votre projet : votre phrase se construit en direct sous vos yeux." },
+  B: { titre: "Ma mini-charte express", duree: "13 min", module: "Identité visuelle", court: "Atelier B",
        consigne: "Remplissez les 5 cases de votre charte, puis envoyez : elle apparaît aussitôt sur le mur avec celles du groupe." },
-  C: { titre: "Mon profil digital", duree: "15 min", module: "Marketing digital",
-       consigne: "Choisissez votre canal principal et décrivez votre profil idéal en 6 zones. Vous avez déjà une page ? Notez aussi 3 corrections à faire." },
-  D: { titre: "Mes 2 prochaines semaines", duree: "16 min", module: "Marketing digital",
+  C: { titre: "Mon profil digital", duree: "15 min", module: "Marketing digital", court: "Atelier C",
+       consigne: "Choisissez votre canal, ajoutez vos photos et remplissez les 6 zones : votre profil s’affiche comme sur le vrai réseau." },
+  D: { titre: "Mes 2 prochaines semaines", duree: "16 min", module: "Marketing digital", court: "Atelier D",
        consigne: "Placez 6 publications sur 2 semaines (3 par semaine), avec 1 seule offre commerciale, puis rédigez entièrement votre premier post." }
 };
+var ORDRE = ["P", "A", "B", "C", "D"];
 
 /* ---------- petits outils ---------- */
-function el(tag, cls, text) {
-  var e = document.createElement(tag);
-  if (cls) e.className = cls;
-  if (text != null) e.textContent = text;
-  return e;
-}
+function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 function add(parent) { for (var i = 1; i < arguments.length; i++) if (arguments[i]) parent.appendChild(arguments[i]); return parent; }
 function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
 function jeton(cle) {
   var k = "jeton_" + cle, t = store(k);
-  if (!t) {
-    var a = new Uint8Array(16);
-    (window.crypto || window.msCrypto).getRandomValues(a);
-    t = Array.prototype.map.call(a, function (x) { return ("0" + x.toString(16)).slice(-2); }).join("");
-    store(k, t);
-  }
+  if (!t) { var a = new Uint8Array(16); crypto.getRandomValues(a); t = Array.prototype.map.call(a, function (x) { return ("0" + x.toString(16)).slice(-2); }).join(""); store(k, t); }
   return t;
 }
 function input(id, ph, max) { var i = el("input"); i.type = "text"; i.id = id; if (ph) i.placeholder = ph; i.maxLength = max || 120; return i; }
@@ -154,41 +204,24 @@ function select(id, options, first) {
   options.forEach(function (v) { var o = el("option", null, v); o.value = v; s.appendChild(o); });
   return s;
 }
-function field(label, ctrl, hint) {
-  var w = el("div"), l = el("label", null, label);
-  l.htmlFor = ctrl.id || "";
-  if (hint) add(l, el("span", "hint", " " + hint));
-  return add(w, l, ctrl);
-}
-function card(n, titre) {
-  var c = el("div", "card"), h = el("h3");
-  if (n) add(h, el("span", "num", String(n)));
-  h.appendChild(document.createTextNode(titre));
-  return add(c, h);
-}
+function field(label, ctrl, hint) { var w = el("div"), l = el("label", null, label); l.htmlFor = ctrl.id || ""; if (hint) add(l, el("span", "hint", " " + hint)); return add(w, l, ctrl); }
+function card(n, titre) { var c = el("div", "card"), h = el("h3"); if (n) add(h, el("span", "num", String(n))); h.appendChild(document.createTextNode(titre)); return add(c, h); }
 function val(id) { var e = document.getElementById(id); return e ? e.value.trim() : ""; }
 function setVal(id, v) { var e = document.getElementById(id); if (e && v != null) e.value = v; }
-function run(fn, args, ok, ko) {
-  var cle = args[0], jet = args[1], req;
-  if (fn === "envoyer") {
-    req = fetch("/api/reponses", { method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ atelier: cle, jeton: jet, reponse: args[2] }) });
-  } else {
-    var q = "/api/reponses?atelier=" + encodeURIComponent(cle) + (jet ? "&jeton=" + encodeURIComponent(jet) : "") + (fn === "maReponse" ? "&mien=1" : "");
-    req = fetch(q, { cache: "no-store" });
-  }
-  req.then(function (r) {
-    return r.json().catch(function () { return {}; }).then(function (d) {
-      if (!r.ok) throw new Error((d && d.erreur) || ("erreur " + r.status));
-      return d;
-    });
-  }).then(ok, function (e) { ko(e && e.message ? e.message : String(e)); });
+function api(url, body) {
+  var opts = body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : { cache: "no-store" };
+  return fetch(url, opts).then(function (r) {
+    return r.json().catch(function () { return {}; }).then(function (d) { if (!r.ok) throw new Error((d && d.erreur) || ("erreur " + r.status)); return d; });
+  });
 }
+function heure() { return new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", second: "2-digit" }); }
+function agrandir() { document.documentElement.style.zoom = Math.max(1, Math.min(2.2, window.innerWidth / 1150)); }
 
-/* ---------- en-tête ---------- */
+/* ---------- en-tête et menu ---------- */
 function entete(root) {
   var c = CONF[ATELIER], top = el("div", "top");
-  add(top, el("div", "eyebrow", "Atelier " + ATELIER + " · " + c.module), el("h1", null, c.titre));
+  if (!MUR && !PROJ) { var b = el("a", "back", "← Tous les ateliers"); b.href = BASE; top.appendChild(b); }
+  add(top, el("div", "eyebrow", c.court + " · " + c.module), el("h1", null, c.titre));
   if (!MUR && !PROJ) {
     var meta = el("div", "meta");
     add(meta, el("span", "pill", c.duree), el("span", "pill ocre", "Formation du 24/11/2026"));
@@ -196,393 +229,442 @@ function entete(root) {
   }
   root.appendChild(top);
 }
-
-/* ---------- menu ---------- */
 function menu(root) {
   var top = el("div", "top");
   add(top, el("div", "eyebrow", "B-Lossom Center · 24/11/2026"), el("h1", null, "Ateliers en ligne"),
-      el("p", "consigne", "Choisissez l’atelier annoncé par l’animateur."));
+      el("p", "consigne", "Choisissez l’atelier annoncé par l’animateur. Commencez par « Mon projet » : il vous servira d’exemple pour tous les autres."));
   root.appendChild(top);
-  var m = el("div", "menu");
-  m.style.marginTop = "20px";
-  ["B", "C", "D"].forEach(function (k) {
-    var a = el("a");
-    a.href = BASE + "?atelier=" + k;
-    add(a, el("div", "eyebrow", "Atelier " + k + " · " + CONF[k].duree), el("h2", null, CONF[k].titre), el("p", null, CONF[k].consigne));
+  var m = el("div", "menu"); m.style.marginTop = "20px";
+  ORDRE.forEach(function (k) {
+    var a = el("a"); a.href = BASE + "?atelier=" + k;
+    add(a, el("div", "eyebrow", CONF[k].court + " · " + CONF[k].duree), el("h2", null, CONF[k].titre), el("p", null, CONF[k].consigne));
     m.appendChild(a);
   });
   root.appendChild(m);
 }
 
 /* ---------- formulaires ---------- */
-var POLICES = ["Playfair Display", "Montserrat", "Poppins", "Lora", "Inter", "Open Sans", "Roboto", "Bebas Neue", "Dancing Script"];
-
-function identite(form) {
+function identite(form, sansMarque) {
   var c = card(null, "Qui êtes-vous ?");
-  var nom = input("nom", "Prénom et nom", 80), marque = input("marque", "Nom de votre projet ou marque", 80);
-  nom.value = store("nom") || "";
-  add(c, field("Votre nom", nom), field("Votre marque ou projet", marque));
+  var nom = input("nom", "Prénom et nom", 80); nom.value = store("nom") || "";
+  c.appendChild(field("Votre nom", nom, "(il s’affichera sur le mur)"));
+  if (!sansMarque) { var marque = input("marque", "Nom de votre projet ou marque", 80); marque.value = store("marque") || ""; c.appendChild(field("Votre marque ou projet", marque)); }
   form.appendChild(c);
 }
 
+/* P - Mon projet */
+function formP(form) {
+  var c = card(null, "Votre projet");
+  var m = input("marque", "Ex. Épices du Nord", 80); m.value = store("marque") || "";
+  add(c, field("Nom de votre projet ou de votre marque", m),
+      field("Votre projet en une phrase", area("phraseProjet", "Ex. Une épicerie artisanale d’épices et de vanille de Nosy Be", 200)));
+  form.appendChild(c);
+  var c2 = card(null, "Une marque que vous suivez en ligne");
+  add(c2, field("Laquelle ?", input("suivie", "Ex. une page Facebook, un compte Instagram…", 80)),
+      field("Pourquoi la suivez-vous ?", area("pourquoi", "Ex. leurs photos sont belles, ils répondent vite…", 240)));
+  form.appendChild(c2);
+}
+function collectP() { return { phraseProjet: val("phraseProjet"), suivie: val("suivie"), pourquoi: val("pourquoi") }; }
+function fillP(d) { setVal("phraseProjet", d.phraseProjet); setVal("suivie", d.suivie); setVal("pourquoi", d.pourquoi); }
+
+/* A - Phrase de positionnement */
+var MORCEAUX = [["cible", "Pour…", "votre cible, ex. les voyageurs"], ["besoin", "qui…", "leur besoin, ex. veulent rapporter un vrai goût de Madagascar"],
+  ["categorie", "est…", "votre catégorie, ex. l’épicerie artisanale"], ["benefice", "qui…", "votre bénéfice unique, ex. garantit l’origine de chaque produit"],
+  ["preuve", "grâce à…", "votre preuve, ex. des achats directs aux producteurs"]];
+function phraseNodes(d, marque, parent, vide) {
+  function part(txt, k) { if (d[k]) add(parent, el("b", null, d[k])); else if (vide) add(parent, el("span", "vide", "[" + k + "]")); else add(parent, el("span", null, "…")); }
+  parent.appendChild(document.createTextNode("Pour ")); part(null, "cible");
+  parent.appendChild(document.createTextNode(" qui ")); part(null, "besoin");
+  parent.appendChild(document.createTextNode(", " + (marque || "[marque]") + " est ")); part(null, "categorie");
+  parent.appendChild(document.createTextNode(" qui ")); part(null, "benefice");
+  parent.appendChild(document.createTextNode(", grâce à ")); part(null, "preuve");
+  parent.appendChild(document.createTextNode("."));
+}
+function formA(form) {
+  var c = card(null, "Ma formule en 5 morceaux");
+  MORCEAUX.forEach(function (m) { c.appendChild(field(m[1], input(m[0], m[2], 140))); });
+  var prev = el("div", "preview-phrase"); prev.id = "previewPhrase";
+  add(c, el("label", null, "Ma phrase"), prev);
+  form.appendChild(c);
+  function maj() { prev.textContent = ""; phraseNodes(collectA(), val("marque"), prev, true); }
+  form.addEventListener("input", maj); setTimeout(maj, 0);
+}
+function collectA() { var d = {}; MORCEAUX.forEach(function (m) { d[m[0]] = val(m[0]); }); return d; }
+function fillA(d) { MORCEAUX.forEach(function (m) { setVal(m[0], d[m[0]]); }); var p = document.getElementById("previewPhrase"); if (p) { p.textContent = ""; phraseNodes(d, val("marque"), p, true); } }
+
+/* B - Mini-charte */
+var POLICES = ["Playfair Display", "Montserrat", "Poppins", "Lora", "Inter", "Open Sans", "Roboto", "Bebas Neue", "Dancing Script"];
 function formB(form) {
   var c1 = card(1, "Mes 3 mots d’ambiance"), r = el("div", "row3");
-  add(r, input("amb1", "Calme"), input("amb2", "Authentique"), input("amb3", "Lumineux"));
-  add(c1, r); form.appendChild(c1);
-
+  add(r, input("amb1", "Calme"), input("amb2", "Authentique"), input("amb3", "Lumineux")); add(c1, r); form.appendChild(c1);
   var c2 = card(2, "Mes couleurs");
   add(c2, el("p", "hint", "Touchez le carré pour choisir la couleur, puis donnez-lui un nom."));
   [["c1", "Principale", "#0F4C5C"], ["c2", "Accent", "#E3A23B"], ["c3", "Neutre", "#FAF7F2"]].forEach(function (x) {
-    var row = el("div", "color-row"), pick = el("input");
-    pick.type = "color"; pick.id = x[0] + "hex"; pick.value = x[2];
-    var nm = input(x[0] + "nom", x[1] + " : nom de la couleur", 40);
-    add(row, pick, nm);
-    add(c2, el("label", null, x[1]), row);
+    var row = el("div", "color-row"), pick = el("input"); pick.type = "color"; pick.id = x[0] + "hex"; pick.value = x[2];
+    add(row, pick, input(x[0] + "nom", x[1] + " : nom de la couleur", 40)); add(c2, el("label", null, x[1]), row);
   });
   form.appendChild(c2);
-
-  var c3 = card(3, "Mes 2 polices");
-  var dl = el("datalist"); dl.id = "polices";
+  var c3 = card(3, "Mes 2 polices"), dl = el("datalist"); dl.id = "polices";
   POLICES.forEach(function (p) { var o = el("option"); o.value = p; dl.appendChild(o); });
   var p1 = input("pTitres", "Ex. Playfair Display", 40), p2 = input("pTexte", "Ex. Inter", 40);
   p1.setAttribute("list", "polices"); p2.setAttribute("list", "polices");
-  add(c3, dl, field("Pour les titres", p1), field("Pour le texte", p2));
-  form.appendChild(c3);
-
-  var c4 = card(4, "Mon style d’images");
-  add(c4, field("En 3 mots", input("images", "Lumière naturelle, vrais visages, gros plans", 120)));
-  form.appendChild(c4);
-
-  var c5 = card(5, "Mon ton");
-  var r2 = el("div", "row2");
+  add(c3, dl, field("Pour les titres", p1), field("Pour le texte", p2)); form.appendChild(c3);
+  var c4 = card(4, "Mon style d’images"); add(c4, field("En 3 mots", input("images", "Lumière naturelle, vrais visages, gros plans", 120))); form.appendChild(c4);
+  var c5 = card(5, "Mon ton"), r2 = el("div", "row2");
   add(r2, field("Je suis…", input("tonOui", "Chaleureux", 60)), field("… mais pas…", input("tonNon", "Familier", 60)));
-  add(c5, r2, field("2 interdits", input("interdit1", "Ex. logo déformé", 80)), input("interdit2", "Ex. plus de 3 couleurs", 80));
-  form.appendChild(c5);
+  add(c5, r2, field("2 interdits", input("interdit1", "Ex. logo déformé", 80)), input("interdit2", "Ex. plus de 3 couleurs", 80)); form.appendChild(c5);
 }
-
 function collectB() {
-  return {
-    ambiance: [val("amb1"), val("amb2"), val("amb3")].filter(Boolean),
+  return { ambiance: [val("amb1"), val("amb2"), val("amb3")].filter(Boolean),
     couleurs: ["c1", "c2", "c3"].map(function (k, i) { return { role: ["Principale", "Accent", "Neutre"][i], hex: val(k + "hex"), nom: val(k + "nom") }; }),
-    polices: { titres: val("pTitres"), texte: val("pTexte") },
-    images: val("images"),
-    ton: { oui: val("tonOui"), non: val("tonNon") },
-    interdits: [val("interdit1"), val("interdit2")].filter(Boolean)
-  };
+    polices: { titres: val("pTitres"), texte: val("pTexte") }, images: val("images"), ton: { oui: val("tonOui"), non: val("tonNon") },
+    interdits: [val("interdit1"), val("interdit2")].filter(Boolean) };
 }
 function fillB(d) {
   (d.ambiance || []).forEach(function (v, i) { setVal("amb" + (i + 1), v); });
   (d.couleurs || []).forEach(function (c, i) { setVal("c" + (i + 1) + "hex", c.hex); setVal("c" + (i + 1) + "nom", c.nom); });
   if (d.polices) { setVal("pTitres", d.polices.titres); setVal("pTexte", d.polices.texte); }
-  setVal("images", d.images);
-  if (d.ton) { setVal("tonOui", d.ton.oui); setVal("tonNon", d.ton.non); }
+  setVal("images", d.images); if (d.ton) { setVal("tonOui", d.ton.oui); setVal("tonNon", d.ton.non); }
   (d.interdits || []).forEach(function (v, i) { setVal("interdit" + (i + 1), v); });
 }
 
+/* C - Profil digital, avec photos */
 var CANAUX = ["Page Facebook", "Fiche Google Business Profile", "WhatsApp Business", "Instagram", "TikTok"];
 var BOUTONS = ["Envoyer un message", "Réserver", "Appeler", "Itinéraire", "Commander"];
-
+var PHOTOS = {}, PHOTOS_AVANT = null;
+var MAXIMG = 440000;
+function compresser(file, w, h, crop) {
+  return new Promise(function (ok, ko) {
+    var url = URL.createObjectURL(file), img = new Image();
+    img.onload = function () {
+      var sw = img.naturalWidth, sh = img.naturalHeight, cw = w, ch = h, sx = 0, sy = 0, cwSrc = sw, chSrc = sh;
+      if (crop) { var r = Math.max(w / sw, h / sh); cwSrc = w / r; chSrc = h / r; sx = (sw - cwSrc) / 2; sy = (sh - chSrc) / 2; }
+      else { var r2 = Math.min(1, w / sw); cw = Math.round(sw * r2); ch = Math.round(sh * r2); }
+      var cv = document.createElement("canvas"); cv.width = cw; cv.height = ch;
+      cv.getContext("2d").drawImage(img, sx, sy, cwSrc, chSrc, 0, 0, cw, ch);
+      URL.revokeObjectURL(url);
+      var q = 0.82, d = cv.toDataURL("image/jpeg", q);
+      while (d.length > MAXIMG && q > 0.4) { q -= 0.1; d = cv.toDataURL("image/jpeg", q); }
+      ok(d);
+    };
+    img.onerror = function () { ko(new Error("Image illisible")); };
+    img.src = url;
+  });
+}
+function champPhoto(cle, label, forme, w, h) {
+  var wrap = el("div", "upload"), th = el("div", "thumb " + forme), inp = el("input"); inp.type = "file"; inp.accept = "image/*"; inp.id = "ph_" + cle;
+  var lab = el("label", null, label); lab.htmlFor = inp.id; lab.style.margin = "0 0 4px";
+  var right = el("div"); add(right, lab, inp);
+  inp.onchange = function () {
+    var f = inp.files && inp.files[0]; if (!f) return;
+    th.style.opacity = ".5";
+    compresser(f, w, h, true).then(function (d) { PHOTOS[cle] = d; th.style.backgroundImage = "url(" + d + ")"; th.style.opacity = "1"; })
+      .catch(function () { th.style.opacity = "1"; alert("Cette image n’a pas pu être lue."); });
+  };
+  th.id = "th_" + cle;
+  return add(wrap, th, right);
+}
 function formC(form) {
   var c0 = card(null, "Mon canal principal");
-  add(c0, field("Canal", select("canal", CANAUX, "Choisissez…")));
-  form.appendChild(c0);
-
+  add(c0, field("Canal", select("canal", CANAUX, "Choisissez…"))); form.appendChild(c0);
+  var cp = card(null, "Mes photos");
+  add(cp, el("p", "hint", "Facultatif. Les photos sont réduites automatiquement avant l’envoi."),
+      champPhoto("profil", "Photo de profil (votre logo carré)", "round", 360, 360),
+      champPhoto("couverture", "Photo de couverture ou bannière", "wide", 1000, 380),
+      champPhoto("post1", "Publication 1", "", 600, 600), champPhoto("post2", "Publication 2", "", 600, 600), champPhoto("post3", "Publication 3", "", 600, 600));
+  form.appendChild(cp);
   var c = card(null, "Mon profil en 6 zones");
-  add(c,
-    field("1. Photo de profil", input("photo", "Ex. logo carré sur fond bleu", 120), "(votre logo en version carrée)"),
-    field("2. Bannière", input("banniere", "Ex. photo du lagon aux couleurs de la charte", 140)),
-    field("3. Nom affiché", input("nomAffiche", "Le même sur tous vos canaux", 60)));
+  add(c, field("1. Photo de profil", input("photo", "Ex. logo carré sur fond bleu", 120), "(si vous n’avez pas de photo, décrivez-la)"),
+      field("2. Bannière", input("banniere", "Ex. photo du lagon aux couleurs de la charte", 140)),
+      field("3. Nom affiché", input("nomAffiche", "Le même sur tous vos canaux", 60)));
   var bio = area("bio", "Votre phrase de positionnement", 150), cnt = el("div", "counter", "0 / 150");
   bio.addEventListener("input", function () { cnt.textContent = bio.value.length + " / 150"; cnt.className = "counter" + (bio.value.length >= 150 ? " over" : ""); });
-  add(c, field("4. Bio", bio, "(150 caractères maximum)"), cnt,
-    field("5. Coordonnées et horaires", input("coord", "Téléphone, lieu, horaires", 160)),
-    field("6. Bouton d’action", select("bouton", BOUTONS, "Choisissez…")));
+  add(c, field("4. Bio", bio, "(150 caractères maximum)"), cnt, field("5. Coordonnées et horaires", input("coord", "Téléphone, lieu, horaires", 160)),
+      field("6. Bouton d’action", select("bouton", BOUTONS, "Choisissez…")));
   form.appendChild(c);
-
   var c3 = card(null, "Déjà une page ? 3 corrections");
-  add(c3, el("p", "hint", "Facultatif : ce que vous allez changer sur votre vraie page."),
-    input("corr1", "Correction 1", 120), el("div"), input("corr2", "Correction 2", 120), el("div"), input("corr3", "Correction 3", 120));
+  add(c3, el("p", "hint", "Facultatif : ce que vous allez changer sur votre vraie page."), input("corr1", "Correction 1", 120), input("corr2", "Correction 2", 120), input("corr3", "Correction 3", 120));
   c3.querySelectorAll("input").forEach(function (i) { i.style.marginTop = "8px"; });
   form.appendChild(c3);
 }
 function collectC() {
-  return {
-    canal: val("canal"), photo: val("photo"), banniere: val("banniere"), nomAffiche: val("nomAffiche"),
-    bio: val("bio"), coord: val("coord"), bouton: val("bouton"),
-    corrections: [val("corr1"), val("corr2"), val("corr3")].filter(Boolean)
-  };
+  return { canal: val("canal"), photo: val("photo"), banniere: val("banniere"), nomAffiche: val("nomAffiche"), bio: val("bio"), coord: val("coord"), bouton: val("bouton"),
+    corrections: [val("corr1"), val("corr2"), val("corr3")].filter(Boolean) };
 }
-function fillC(d) {
+function fillC(d, r) {
   ["canal", "photo", "banniere", "nomAffiche", "bio", "coord", "bouton"].forEach(function (k) { setVal(k, d[k]); });
   (d.corrections || []).forEach(function (v, i) { setVal("corr" + (i + 1), v); });
+  if (d.photos && r && r.pid) {
+    PHOTOS_AVANT = d.photos;
+    ["profil", "couverture", "post1", "post2", "post3"].forEach(function (k) {
+      if (d.photos[k]) { var t = document.getElementById("th_" + k); if (t) t.style.backgroundImage = "url(" + photoUrl(r.pid, k, d.photos.v) + ")"; }
+    });
+  }
 }
+function envoyerPhotos() {
+  var cles = Object.keys(PHOTOS);
+  if (!cles.length) return Promise.resolve(PHOTOS_AVANT);
+  var res = {}; if (PHOTOS_AVANT) Object.keys(PHOTOS_AVANT).forEach(function (k) { res[k] = PHOTOS_AVANT[k]; });
+  return cles.reduce(function (p, k) {
+    return p.then(function () { return api("/api/photo", { atelier: "C", jeton: jeton("C"), type: k, data: PHOTOS[k] }).then(function () { res[k] = true; }); });
+  }, Promise.resolve()).then(function () { res.v = Date.now(); PHOTOS = {}; PHOTOS_AVANT = res; return res; });
+}
+function photoUrl(pid, t, v) { return "/api/photo?a=C&id=" + encodeURIComponent(pid) + "&t=" + t + (v ? "&v=" + v : ""); }
 
+/* D - Calendrier */
 var JOURS = (function () { var j = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"], o = []; [1, 2].forEach(function (s) { j.forEach(function (x) { o.push(x + " · S" + s); }); }); return o; })();
 var PILIERS = ["Montrer", "Apprendre", "Coulisses", "Preuve", "Offre commerciale"];
 var FORMATS = ["Photo", "Vidéo courte", "Carrousel", "Story", "Avant / après"];
-
 function formD(form) {
   var c = card(null, "Mes 6 publications");
   add(c, el("p", "hint", "S1 = semaine 1, S2 = semaine 2. Une seule offre commerciale sur les 6."));
   for (var i = 1; i <= 6; i++) {
     var row = el("div", "post-row"), r3 = el("div", "row3");
     add(r3, select("jour" + i, JOURS, "Jour"), select("pilier" + i, PILIERS, "Pilier"), select("format" + i, FORMATS, "Format"));
-    add(row, el("div", "eyebrow", "Publication " + i), r3, input("idee" + i, "L’idée en une ligne", 140));
-    row.querySelector("input").style.marginTop = "8px";
-    c.appendChild(row);
+    var idee = input("idee" + i, "L’idée en une ligne", 140); idee.style.marginTop = "8px";
+    add(row, el("div", "eyebrow", "Publication " + i), r3, idee); c.appendChild(row);
   }
-  var checks = el("div", "checks"); checks.id = "checks";
-  add(c, checks);
-  form.appendChild(c);
+  var checks = el("div", "checks"); checks.id = "checks"; add(c, checks); form.appendChild(c);
   c.addEventListener("change", majChecks); c.addEventListener("input", majChecks);
-
   var c2 = card(null, "Ma première publication, rédigée");
-  add(c2,
-    field("Accroche", input("accroche", "La phrase qui arrête le pouce", 140), "(les 3 premières secondes)"),
-    field("Texte", area("texte", "2 ou 3 phrases, dans votre ton", 700)),
-    field("Appel à l’action", input("cta", "Ex. Écrivez-nous sur WhatsApp", 100)));
-  form.appendChild(c2);
-  setTimeout(majChecks, 0);
+  add(c2, field("Accroche", input("accroche", "La phrase qui arrête le pouce", 140), "(les 3 premières secondes)"),
+      field("Texte", area("texte", "2 ou 3 phrases, dans votre ton", 700)), field("Appel à l’action", input("cta", "Ex. Écrivez-nous sur WhatsApp", 100)));
+  form.appendChild(c2); setTimeout(majChecks, 0);
 }
-function collectD() {
-  var posts = [];
-  for (var i = 1; i <= 6; i++) posts.push({ jour: val("jour" + i), pilier: val("pilier" + i), format: val("format" + i), idee: val("idee" + i) });
-  return { posts: posts, accroche: val("accroche"), texte: val("texte"), cta: val("cta") };
-}
-function fillD(d) {
-  (d.posts || []).forEach(function (p, i) { var n = i + 1; setVal("jour" + n, p.jour); setVal("pilier" + n, p.pilier); setVal("format" + n, p.format); setVal("idee" + n, p.idee); });
-  setVal("accroche", d.accroche); setVal("texte", d.texte); setVal("cta", d.cta);
-  majChecks();
-}
+function collectD() { var posts = []; for (var i = 1; i <= 6; i++) posts.push({ jour: val("jour" + i), pilier: val("pilier" + i), format: val("format" + i), idee: val("idee" + i) }); return { posts: posts, accroche: val("accroche"), texte: val("texte"), cta: val("cta") }; }
+function fillD(d) { (d.posts || []).forEach(function (p, i) { var n = i + 1; setVal("jour" + n, p.jour); setVal("pilier" + n, p.pilier); setVal("format" + n, p.format); setVal("idee" + n, p.idee); }); setVal("accroche", d.accroche); setVal("texte", d.texte); setVal("cta", d.cta); majChecks(); }
 function analyseD(d) {
-  var posts = (d.posts || []).filter(function (p) { return p.idee || p.pilier; });
-  var offres = posts.filter(function (p) { return p.pilier === "Offre commerciale"; }).length;
-  var piliers = {};
+  var posts = (d.posts || []).filter(function (p) { return p.idee || p.pilier; }), piliers = {};
   posts.forEach(function (p) { if (p.pilier && p.pilier !== "Offre commerciale") piliers[p.pilier] = 1; });
-  return { n: posts.length, offres: offres, piliers: Object.keys(piliers).length };
+  return { n: posts.length, offres: posts.filter(function (p) { return p.pilier === "Offre commerciale"; }).length, piliers: Object.keys(piliers).length };
 }
 function badges(a, parent) {
   parent.textContent = "";
-  add(parent,
-    el("span", "check " + (a.n >= 6 ? "ok" : ""), a.n + " / 6 publications"),
-    el("span", "check " + (a.piliers >= 4 ? "ok" : ""), a.piliers + " / 4 piliers"),
-    el("span", "check " + (a.offres <= 1 ? "ok" : "ko"), a.offres <= 1 ? "Règle 80/20 respectée" : a.offres + " offres : 1 seule maximum"));
+  add(parent, el("span", "check " + (a.n >= 6 ? "ok" : ""), a.n + " / 6 publications"), el("span", "check " + (a.piliers >= 4 ? "ok" : ""), a.piliers + " / 4 piliers"),
+      el("span", "check " + (a.offres <= 1 ? "ok" : "ko"), a.offres <= 1 ? "Règle 80/20 respectée" : a.offres + " offres : 1 seule maximum"));
 }
 function majChecks() { var b = document.getElementById("checks"); if (b) badges(analyseD(collectD()), b); }
 
-var FORMS = { B: [formB, collectB, fillB], C: [formC, collectC, fillC], D: [formD, collectD, fillD] };
+var FORMS = { P: [formP, collectP, fillP, true], A: [formA, collectA, fillA], B: [formB, collectB, fillB], C: [formC, collectC, fillC], D: [formD, collectD, fillD] };
 
 /* ---------- cartes du mur ---------- */
+function carteP(d, box) {
+  if (d.phraseProjet) box.appendChild(el("div", "phrase", d.phraseProjet));
+  if (d.suivie) { add(box, el("div", "k", "La marque que je suis"), el("div", null, d.suivie)); }
+  if (d.pourquoi) box.appendChild(el("div", "quote", "Pourquoi : " + d.pourquoi));
+}
+function carteA(d, box, r) { var p = el("div", "phrase"); phraseNodes(d, r.marque, p, false); box.appendChild(p); }
 function carteB(d, box) {
   if (d.couleurs && d.couleurs.length) {
-    add(box, el("div", "k", "Couleurs"));
-    var s = el("div", "swatches");
-    d.couleurs.forEach(function (c) {
-      var w = el("div", "sw"), b = el("div", "box");
-      if (/^#[0-9a-fA-F]{6}$/.test(c.hex || "")) b.style.background = c.hex;
-      add(w, b, el("div", "nm", c.nom || c.role), el("div", "hx", (c.hex || "").toUpperCase()));
-      s.appendChild(w);
-    });
+    add(box, el("div", "k", "Couleurs")); var s = el("div", "swatches");
+    d.couleurs.forEach(function (c) { var w = el("div", "sw"), b = el("div", "box"); if (/^#[0-9a-fA-F]{6}$/.test(c.hex || "")) b.style.background = c.hex; add(w, b, el("div", "nm", c.nom || c.role), el("div", "hx", (c.hex || "").toUpperCase())); s.appendChild(w); });
     box.appendChild(s);
   }
-  if (d.ambiance && d.ambiance.length) {
-    add(box, el("div", "k", "Ambiance"));
-    var ch = el("div", "chips"); d.ambiance.forEach(function (a) { ch.appendChild(el("span", "chip", a)); }); box.appendChild(ch);
-  }
-  if (d.polices && (d.polices.titres || d.polices.texte)) {
-    var f = el("div", "fonts");
-    add(f, el("div", "f1", d.polices.titres || "-"), el("div", "f2", d.polices.texte || "-"));
-    add(box, el("div", "k", "Polices : titres, texte"), f);
-  }
+  if (d.ambiance && d.ambiance.length) { add(box, el("div", "k", "Ambiance")); var ch = el("div", "chips"); d.ambiance.forEach(function (a) { ch.appendChild(el("span", "chip", a)); }); box.appendChild(ch); }
+  if (d.polices && (d.polices.titres || d.polices.texte)) { var f = el("div", "fonts"); add(f, el("div", "f1", d.polices.titres || "-"), el("div", null, d.polices.texte || "-")); add(box, el("div", "k", "Polices : titres, texte"), f); }
   if (d.images) add(box, el("div", "k", "Images"), el("div", null, d.images));
   if (d.ton && (d.ton.oui || d.ton.non)) add(box, el("div", "k", "Ton"), el("div", null, "Je suis " + (d.ton.oui || "…") + ", mais pas " + (d.ton.non || "…") + "."));
-  if (d.interdits && d.interdits.length) {
-    add(box, el("div", "k", "Interdits"));
-    var ch2 = el("div", "chips"); d.interdits.forEach(function (a) { ch2.appendChild(el("span", "chip", a)); }); box.appendChild(ch2);
-  }
+  if (d.interdits && d.interdits.length) { add(box, el("div", "k", "Interdits")); var ch2 = el("div", "chips"); d.interdits.forEach(function (a) { ch2.appendChild(el("span", "chip", a)); }); box.appendChild(ch2); }
 }
-function carteC(d, box) {
-  var p = el("div", "phone");
-  if (d.canal) p.appendChild(el("span", "canal", d.canal));
-  add(p, el("div", "pname", d.nomAffiche || "Nom affiché"));
-  if (d.bio) p.appendChild(el("div", "bio", d.bio));
-  if (d.coord) p.appendChild(el("div", "coord", d.coord));
-  if (d.bouton) p.appendChild(el("span", "cta", d.bouton));
-  if (d.photo) p.appendChild(el("div", "desc", "Photo : " + d.photo));
-  if (d.banniere) p.appendChild(el("div", "desc", "Bannière : " + d.banniere));
-  box.appendChild(p);
+function bg(div, url) { if (url) div.style.backgroundImage = "url(\"" + url.replace(/"/g, "") + "\")"; return div; }
+function carteC(d, box, r) {
+  var ph = d.photos || {}, u = function (k) { return ph[k] && r.pid ? photoUrl(r.pid, k, ph.v) : ""; };
+  var nom = d.nomAffiche || r.marque || "Nom affiché", posts = ["post1", "post2", "post3"].filter(function (k) { return ph[k]; });
+  function grille(p) { if (!posts.length) return null; var g = el("div", "posts"); posts.forEach(function (k) { g.appendChild(bg(el("div"), u(k))); }); return g; }
+  function cover() { var c = el("div", "cover"); if (u("couverture")) bg(c, u("couverture")); else c.textContent = d.banniere ? "Bannière : " + d.banniere : "Bannière"; return c; }
+  function av() { var a = el("div", "av"); bg(a, u("profil")); return a; }
+  var canal = d.canal || "Page Facebook", pf;
+  if (canal === "Fiche Google Business Profile") {
+    pf = el("div", "pf pf-gg"); var b1 = el("div", "body");
+    pf.appendChild(cover());
+    add(b1, el("div", "tag", "PROFIL D’ÉTABLISSEMENT"), el("div", "nm", nom), el("div", "sub", r.marque || ""));
+    var act = el("div", "act"); ["Itinéraire", "Appeler", "Site web"].forEach(function (x) { act.appendChild(el("span", x === d.bouton || (x === "Appeler" && d.bouton === "Appeler") ? "main" : "", x)); });
+    if (d.bouton && ["Itinéraire", "Appeler"].indexOf(d.bouton) < 0) act.insertBefore(el("span", "main", d.bouton), act.firstChild);
+    add(b1, act); if (d.coord) b1.appendChild(el("div", "info", d.coord)); if (d.bio) b1.appendChild(el("div", "bio", d.bio));
+    var g = grille(); if (g) b1.appendChild(g); pf.appendChild(b1);
+  } else if (canal === "WhatsApp Business") {
+    pf = el("div", "pf pf-wa"); pf.appendChild(el("div", "bar", "Profil professionnel"));
+    var cw = el("div", "center"); add(cw, av(), el("div", "nm", nom), el("div", "badge", "Compte professionnel"));
+    var b2 = el("div", "body"); if (d.bio) b2.appendChild(el("div", "bio", d.bio)); if (d.coord) b2.appendChild(el("div", "info", d.coord));
+    var g2 = grille(); if (g2) add(b2, el("div", "cat", "Catalogue"), g2);
+    if (d.bouton) { var a2 = el("div", "act"); a2.appendChild(el("span", "main", d.bouton)); b2.appendChild(a2); }
+    add(pf, cw, b2);
+  } else if (canal === "Instagram") {
+    pf = el("div", "pf pf-ig"); var h = el("div", "head"), ring = el("div", "ring"); ring.appendChild(av());
+    var st = el("div", "stats"), s1 = el("div"); add(s1, el("b", null, String(posts.length)), el("span", null, "publications")); st.appendChild(s1);
+    add(h, ring, st); var b3 = el("div", "body"); add(b3, el("div", "nm", nom)); if (d.bio) b3.appendChild(el("div", "bio", d.bio)); if (d.coord) b3.appendChild(el("div", "info", d.coord));
+    var a3 = el("div", "act"); add(a3, el("span", "main", d.bouton || "Contacter"), el("span", null, "Suivre")); b3.appendChild(a3);
+    var g3 = grille(); if (g3) b3.appendChild(g3); add(pf, h, b3);
+  } else if (canal === "TikTok") {
+    pf = el("div", "pf pf-tt"); var ct = el("div", "center"); add(ct, av(), el("div", "nm", "@" + nom.toLowerCase().replace(/\s+/g, "")), el("div", "sub", nom));
+    var b4 = el("div", "body"); if (d.bio) { var bi = el("div", "bio", d.bio); bi.style.textAlign = "center"; b4.appendChild(bi); }
+    var a4 = el("div", "act"); add(a4, el("span", "main", "Suivre"), el("span", null, d.bouton || "Message")); b4.appendChild(a4);
+    var g4 = grille(); if (g4) b4.appendChild(g4); add(pf, ct, b4);
+  } else {
+    pf = el("div", "pf pf-fb"); pf.appendChild(cover());
+    var b5 = el("div", "body"), hd = el("div", "head"), nn = el("div"); add(nn, el("div", "nm", nom), el("div", "sub", "Page · " + (r.marque || "Entreprise"))); add(hd, av(), nn);
+    b5.appendChild(hd); if (d.bio) b5.appendChild(el("div", "bio", d.bio)); if (d.coord) b5.appendChild(el("div", "info", d.coord));
+    var a5 = el("div", "act"); add(a5, el("span", "main", d.bouton || "Envoyer un message"), el("span", null, "J’aime")); b5.appendChild(a5);
+    var g5 = grille(); if (g5) b5.appendChild(g5); pf.appendChild(b5);
+  }
+  if (!u("profil") && d.photo) pf.appendChild(el("div", "desc body", "Photo de profil : " + d.photo));
+  box.appendChild(pf);
   if (d.corrections && d.corrections.length) {
-    add(box, el("div", "k", "Mes 3 corrections"));
-    var ul = el("ul"); ul.style.margin = "0"; ul.style.paddingLeft = "18px";
-    d.corrections.forEach(function (c) { ul.appendChild(el("li", null, c)); });
-    box.appendChild(ul);
+    add(box, el("div", "k", "Mes 3 corrections")); var ul = el("ul"); ul.style.margin = "0"; ul.style.paddingLeft = "18px";
+    d.corrections.forEach(function (c) { ul.appendChild(el("li", null, c)); }); box.appendChild(ul);
   }
 }
 function carteD(d, box) {
   var posts = (d.posts || []).filter(function (p) { return p.idee || p.pilier; });
   if (posts.length) {
-    add(box, el("div", "k", "Planning"));
-    var t = el("table", "plan");
+    add(box, el("div", "k", "Planning")); var t = el("table", "plan");
     posts.forEach(function (p) {
-      var tr = el("tr"), td1 = el("td", null, p.jour || "-"), td2 = el("td"), td3 = el("td", null, (p.format ? p.format + " : " : "") + (p.idee || ""));
-      td1.style.whiteSpace = "nowrap";
+      var tr = el("tr"), td1 = el("td", null, p.jour || "-"), td2 = el("td"), td3 = el("td", null, (p.format ? p.format + " : " : "") + (p.idee || "")); td1.style.whiteSpace = "nowrap";
       if (p.pilier) td2.appendChild(el("span", "pil " + (p.pilier === "Offre commerciale" ? "Offre" : p.pilier), p.pilier === "Offre commerciale" ? "Offre" : p.pilier));
       add(tr, td1, td2, td3); t.appendChild(tr);
     });
-    box.appendChild(t);
-    var b = el("div", "checks"); badges(analyseD(d), b); box.appendChild(b);
+    box.appendChild(t); var b = el("div", "checks"); badges(analyseD(d), b); box.appendChild(b);
   }
   if (d.accroche || d.texte || d.cta) {
-    add(box, el("div", "k", "Premier post"));
-    var pb = el("div", "postbox");
-    if (d.accroche) pb.appendChild(el("div", "acc", d.accroche));
-    if (d.texte) pb.appendChild(el("div", null, d.texte));
-    if (d.cta) pb.appendChild(el("div", "cta2", d.cta));
+    add(box, el("div", "k", "Premier post")); var pb = el("div", "postbox");
+    if (d.accroche) pb.appendChild(el("div", "acc", d.accroche)); if (d.texte) pb.appendChild(el("div", null, d.texte)); if (d.cta) pb.appendChild(el("div", "cta2", d.cta));
     box.appendChild(pb);
   }
 }
-var CARTES = { B: carteB, C: carteC, D: carteD };
+var CARTES = { P: carteP, A: carteA, B: carteB, C: carteC, D: carteD };
+
+function construireCarte(r, liste, i) {
+  var box = el("div", "resp" + (r.moi ? " moi" : ""));
+  var tools = el("div", "tools");
+  if (r.moi) tools.appendChild(el("span", "you", "Vous"));
+  var z = el("button", "zoom-btn", "Agrandir"); z.type = "button"; z.onclick = function () { ouvrirModal(liste, i); };
+  tools.appendChild(z); box.appendChild(tools);
+  add(box, el("div", "who", r.nom || "Sans nom"));
+  if (r.marque) box.appendChild(el("div", "brand", r.marque));
+  try { CARTES[ATELIER](r.data || {}, box, r); } catch (e) { /* réponse incomplète */ }
+  return box;
+}
+
+/* ---------- Agrandir : une réponse à la fois ---------- */
+var MODAL = null;
+function ouvrirModal(liste, i) {
+  fermerModal();
+  var m = el("div", "modal"), box = el("div", "box"), nav = el("div", "nav"), prev = el("button", null, "← Précédente"), pos = el("span", "pos"), next = el("button", null, "Suivante →"), close = el("button", null, "Fermer ✕");
+  var zone = el("div"), idx = i;
+  function montrer() {
+    zone.textContent = ""; pos.textContent = (idx + 1) + " / " + liste.length;
+    zone.appendChild(construireCarte(liste[idx], liste, idx));
+    prev.disabled = idx === 0; next.disabled = idx === liste.length - 1;
+    prev.style.opacity = prev.disabled ? ".35" : "1"; next.style.opacity = next.disabled ? ".35" : "1";
+  }
+  prev.onclick = function () { if (idx > 0) { idx--; montrer(); } };
+  next.onclick = function () { if (idx < liste.length - 1) { idx++; montrer(); } };
+  close.onclick = fermerModal;
+  m.onclick = function (e) { if (e.target === m) fermerModal(); };
+  add(nav, prev, pos, next, close); add(box, nav, zone); m.appendChild(box); document.body.appendChild(m);
+  MODAL = { el: m, prev: prev, next: next };
+  montrer();
+}
+function fermerModal() { if (MODAL) { MODAL.el.remove(); MODAL = null; } }
+document.addEventListener("keydown", function (ev) {
+  if (MODAL) {
+    if (ev.key === "Escape") fermerModal(); else if (ev.key === "ArrowLeft") MODAL.prev.click(); else if (ev.key === "ArrowRight") MODAL.next.click(); else return;
+    ev.preventDefault(); ev.stopImmediatePropagation(); return;
+  }
+  /* Dans la présentation (iframe) : les flèches et l'espace restent à la présentation. */
+  if (window.parent !== window && !/^(INPUT|TEXTAREA|SELECT)$/.test(ev.target.tagName)) {
+    try { window.parent.dispatchEvent(new KeyboardEvent("keydown", { key: ev.key, code: ev.code, bubbles: true })); ev.preventDefault(); } catch (e) {}
+  }
+}, true);
 
 function dessinerMur(liste, cible, compteur) {
   cible.textContent = "";
   compteur.textContent = liste.length + (liste.length > 1 ? " réponses" : " réponse");
   if (!liste.length) { cible.appendChild(el("div", "empty", "Aucune réponse pour l’instant. Les premières arrivent bientôt…")); return; }
-  liste.forEach(function (r) {
-    var box = el("div", "resp" + (r.moi ? " moi" : ""));
-    if (r.moi) box.appendChild(el("span", "you", "Vous"));
-    add(box, el("div", "who", r.nom || "Sans nom"));
-    if (r.marque) box.appendChild(el("div", "brand", r.marque));
-    try { CARTES[ATELIER](r.data || {}, box); } catch (e) { /* réponse incomplète : on affiche le reste */ }
-    cible.appendChild(box);
-  });
+  liste.forEach(function (r, i) { cible.appendChild(construireCarte(r, liste, i)); });
 }
 
 /* ---------- pages ---------- */
 var minuterie = null;
 function demarrerMur(cible, compteur, etat) {
   function charger() {
-    run("mur", [ATELIER, (MUR || PROJ) ? "" : jeton(ATELIER)], function (l) { dessinerMur(l, cible, compteur); etat.textContent = "Mis à jour à " + new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", second: "2-digit" }); },
-      function (m) { etat.textContent = "Connexion difficile, nouvel essai…"; });
+    if (MODAL) return;
+    var j = (MUR || PROJ) ? "" : "&jeton=" + jeton(ATELIER);
+    api("/api/reponses?atelier=" + ATELIER + j).then(function (l) { dessinerMur(l, cible, compteur); etat.textContent = "Mis à jour à " + heure(); })
+      .catch(function () { etat.textContent = "Connexion difficile, nouvel essai…"; });
   }
-  charger();
-  if (minuterie) clearInterval(minuterie);
+  charger(); if (minuterie) clearInterval(minuterie);
   minuterie = setInterval(charger, (MUR || PROJ) ? 5000 : 8000);
 }
-
 function pageMur(root) {
-  root.className = "wrap large";
-  entete(root);
-  var head = el("div", "wall-head"), cpt = el("span", "count", "…"), etat = el("span", "live", "Chargement…");
-  head.style.marginTop = "20px";
-  add(head, cpt, etat);
-  var grid = el("div", "grid");
-  add(root, head, grid);
+  root.className = "wrap large"; entete(root);
+  var head = el("div", "wall-head"), cpt = el("span", "count", "…"), etat = el("span", "live", "Chargement…"); head.style.marginTop = "20px";
+  add(head, cpt, etat); var grid = el("div", "grid"); add(root, head, grid); demarrerMur(grid, cpt, etat);
+}
+function dessinerQR(texte) {
+  var NS = "http://www.w3.org/2000/svg", svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("role", "img"); svg.setAttribute("aria-label", "QR code vers " + texte);
+  if (typeof qrcode !== "function") return svg;
+  var qr = qrcode(0, "M"); qr.addData(texte); qr.make();
+  var n = qr.getModuleCount(), m = 2, size = n + 2 * m, d = "";
+  svg.setAttribute("viewBox", "0 0 " + size + " " + size); svg.setAttribute("shape-rendering", "crispEdges");
+  var bgr = document.createElementNS(NS, "rect"); bgr.setAttribute("width", size); bgr.setAttribute("height", size); bgr.setAttribute("fill", "#FFFFFF"); svg.appendChild(bgr);
+  for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (qr.isDark(r, c)) d += "M" + (c + m) + " " + (r + m) + "h1v1h-1z";
+  var path = document.createElementNS(NS, "path"); path.setAttribute("d", d); path.setAttribute("fill", "#0A3642"); svg.appendChild(path);
+  return svg;
+}
+function pageProjection(root) {
+  root.className = "wrap large"; entete(root);
+  var grille = el("div", "proj"), gauche = el("div", "qrbox"), droite = el("div");
+  grille.style.cssText = "display:grid;grid-template-columns:360px 1fr;gap:40px;align-items:start;margin-top:24px";
+  gauche.style.cssText = "position:sticky;top:24px;background:var(--blanc);border-top:6px solid var(--ocre);border-radius:8px;padding:24px;text-align:center";
+  var q = dessinerQR(BASE + "?atelier=" + ATELIER); q.style.cssText = "width:100%;height:auto;display:block";
+  var go = el("div", null, "Scannez pour participer"); go.style.cssText = "font-family:'Playfair Display',Georgia,serif;font-size:24px;color:var(--lagon);font-weight:700;margin-bottom:12px";
+  var url = el("div", null, location.host + "/ateliers"); url.style.cssText = "font-size:18px;font-weight:700;color:var(--lagon);margin-top:12px;word-break:break-all";
+  var then = el("div", null, "puis « " + CONF[ATELIER].court + " »"); then.style.cssText = "font-size:15px;color:var(--soft);margin-top:4px";
+  add(gauche, go, q, url, then);
+  var head = el("div", "wall-head"), cpt = el("span", "count", "…"), etat = el("span", "live", "Chargement…"); add(head, cpt, etat);
+  var grid = el("div", "grid"); add(droite, head, grid); add(grille, gauche, droite); root.appendChild(grille);
   demarrerMur(grid, cpt, etat);
 }
-
 function pageAtelier(root) {
   entete(root);
   var tabs = el("div", "tabs"), t1 = el("button", "tab on", "Ma réponse"), t2 = el("button", "tab", "Le mur du groupe");
   add(tabs, t1, t2); root.appendChild(tabs);
-
-  var vForm = el("div"), vMur = el("div", "hidden");
-  add(root, vForm, vMur);
-
+  var vForm = el("div"), vMur = el("div", "hidden"); add(root, vForm, vMur);
   var form = el("form"); form.noValidate = true;
-  identite(form);
-  FORMS[ATELIER][0](form);
-  var btn = el("button", "btn", "Envoyer et voir le mur"); btn.type = "submit";
-  var msg = el("div", "msg");
-  add(form, btn, msg);
-  vForm.appendChild(form);
-
+  identite(form, FORMS[ATELIER][3]); FORMS[ATELIER][0](form);
+  var btn = el("button", "btn", "Envoyer et voir le mur"); btn.type = "submit"; var msg = el("div", "msg");
+  add(form, btn, msg); vForm.appendChild(form);
   var head = el("div", "wall-head"), cpt = el("span", "count", "…"), etat = el("span", "live", "");
-  var grid = el("div", "grid"), retour = el("button", "btn ghost", "Modifier ma réponse");
-  add(vMur, head, grid, retour); add(head, cpt, etat);
-
+  var grid = el("div", "grid"), retour = el("button", "btn ghost", "Modifier ma réponse"), tous = el("a", "back", "← Tous les ateliers");
+  tous.href = BASE; tous.style.cssText = "display:block;text-align:center;margin-top:16px";
+  add(vMur, head, grid, retour, tous); add(head, cpt, etat);
   function montrer(mur) {
     t1.className = "tab" + (mur ? "" : " on"); t2.className = "tab" + (mur ? " on" : "");
     vForm.className = mur ? "hidden" : ""; vMur.className = mur ? "" : "hidden";
     if (mur) demarrerMur(grid, cpt, etat); else if (minuterie) { clearInterval(minuterie); minuterie = null; }
     window.scrollTo(0, 0);
   }
-  t1.onclick = function () { montrer(false); };
-  t2.onclick = function () { montrer(true); };
-  retour.onclick = function () { montrer(false); };
-
-  run("maReponse", [ATELIER, jeton(ATELIER)], function (d) {
-    if (!d) return;
-    setVal("nom", d.nom); setVal("marque", d.marque);
-    FORMS[ATELIER][2](d);
-  }, function () {});
-
+  t1.onclick = function () { montrer(false); }; t2.onclick = function () { montrer(true); }; retour.onclick = function () { montrer(false); };
+  api("/api/reponses?atelier=" + ATELIER + "&jeton=" + jeton(ATELIER)).then(function (l) {
+    var moi = l.filter(function (r) { return r.moi; })[0]; if (!moi) return;
+    setVal("nom", moi.nom); setVal("marque", moi.marque); FORMS[ATELIER][2](moi.data || {}, moi);
+  }).catch(function () {});
   form.onsubmit = function (ev) {
-    ev.preventDefault();
-    msg.className = "msg";
+    ev.preventDefault(); msg.className = "msg";
     var nom = val("nom");
     if (!nom) { msg.className = "msg err"; msg.textContent = "Indiquez votre nom pour qu’il s’affiche sur le mur."; document.getElementById("nom").focus(); return; }
     var data = FORMS[ATELIER][1]();
     if (ATELIER === "D" && analyseD(data).offres > 1) { msg.className = "msg err"; msg.textContent = "Une seule offre commerciale sur les 6 publications : changez le pilier d’une des offres."; return; }
     data.nom = nom; data.marque = val("marque");
-    store("nom", nom);
-    btn.disabled = true; btn.textContent = "Envoi en cours…";
-    run("envoyer", [ATELIER, jeton(ATELIER), data], function (liste) {
-      btn.disabled = false; btn.textContent = "Envoyer et voir le mur";
-      montrer(true);
-      dessinerMur(liste, grid, cpt);
-    }, function (m) {
-      btn.disabled = false; btn.textContent = "Envoyer et voir le mur";
-      msg.className = "msg err"; msg.textContent = "L’envoi n’a pas abouti (" + m + "). Vérifiez votre connexion et réessayez.";
-    });
+    store("nom", nom); if (data.marque) store("marque", data.marque);
+    btn.disabled = true; btn.textContent = ATELIER === "C" && Object.keys(PHOTOS).length ? "Envoi des photos…" : "Envoi en cours…";
+    var etape = ATELIER === "C" ? envoyerPhotos().then(function (ph) { if (ph) data.photos = ph; }) : Promise.resolve();
+    etape.then(function () { btn.textContent = "Envoi en cours…"; return api("/api/reponses", { atelier: ATELIER, jeton: jeton(ATELIER), reponse: data }); })
+      .then(function (liste) { btn.disabled = false; btn.textContent = "Envoyer et voir le mur"; montrer(true); dessinerMur(liste, grid, cpt); })
+      .catch(function (e) { btn.disabled = false; btn.textContent = "Envoyer et voir le mur"; msg.className = "msg err"; msg.textContent = "L’envoi n’a pas abouti (" + e.message + "). Vérifiez votre connexion et réessayez."; });
   };
-}
-
-function dessinerQR(texte) {
-  var NS = "http://www.w3.org/2000/svg";
-  var svg = document.createElementNS(NS, "svg");
-  svg.setAttribute("role", "img");
-  svg.setAttribute("aria-label", "QR code vers " + texte);
-  if (typeof qrcode !== "function") { svg.setAttribute("viewBox", "0 0 10 10"); return svg; }
-  var qr = qrcode(0, "M"); qr.addData(texte); qr.make();
-  var n = qr.getModuleCount(), m = 2, size = n + 2 * m;
-  svg.setAttribute("viewBox", "0 0 " + size + " " + size);
-  svg.setAttribute("shape-rendering", "crispEdges");
-  var bg = document.createElementNS(NS, "rect");
-  bg.setAttribute("width", size); bg.setAttribute("height", size); bg.setAttribute("fill", "#FFFFFF");
-  svg.appendChild(bg);
-  var d = "";
-  for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (qr.isDark(r, c)) d += "M" + (c + m) + " " + (r + m) + "h1v1h-1z";
-  var path = document.createElementNS(NS, "path");
-  path.setAttribute("d", d); path.setAttribute("fill", "#0A3642");
-  svg.appendChild(path);
-  return svg;
-}
-
-function pageProjection(root) {
-  root.className = "wrap large";
-  entete(root);
-  var lien = BASE + "?atelier=" + ATELIER;
-  var grille = el("div", "proj"), gauche = el("div", "qrbox"), droite = el("div");
-  grille.style.marginTop = "24px";
-  add(gauche, el("div", "go", "Scannez pour participer"), dessinerQR(lien),
-      el("div", "url", location.host + "/ateliers"), el("div", "then", "ou tapez cette adresse, puis choisissez l’atelier " + ATELIER));
-  var head = el("div", "wall-head"), cpt = el("span", "count", "…"), etat = el("span", "live", "Chargement…");
-  add(head, cpt, etat);
-  var grid = el("div", "grid");
-  add(droite, head, grid);
-  add(grille, gauche, droite);
-  root.appendChild(grille);
-  demarrerMur(grid, cpt, etat);
-}
-
-function agrandir() { document.documentElement.style.zoom = Math.max(1, Math.min(2.2, window.innerWidth / 1150)); }
-
-/* Dans la présentation (iframe) : les flèches et l'espace restent à la présentation. */
-if (window.parent !== window) {
-  document.addEventListener("keydown", function (ev) {
-    if (/^(INPUT|TEXTAREA|SELECT)$/.test(ev.target.tagName)) return;
-    try { window.parent.dispatchEvent(new KeyboardEvent("keydown", { key: ev.key, code: ev.code, bubbles: true })); ev.preventDefault(); } catch (e) {}
-  });
 }
 
 (function () {

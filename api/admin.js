@@ -5,7 +5,7 @@ import { timingSafeEqual } from "node:crypto";
 import { Redis } from "@upstash/redis";
 import { lireMur } from "./reponses.js";
 
-const ATELIERS = ["B", "C", "D"];
+const ATELIERS = ["P", "A", "B", "C", "D"];
 
 function cleValide(fournie) {
   const attendue = process.env.ADMIN_KEY || "";
@@ -33,8 +33,11 @@ export default async function handler(req, res) {
         await Redis.fromEnv().del("quiz:final");
         return res.status(200).json({ ok: true, message: "Réponses du quiz effacées." });
       }
-      if (!ATELIERS.includes(atelier)) return res.status(400).json({ erreur: "Atelier inconnu (B, C, D ou QUIZ)." });
-      await Redis.fromEnv().del(`atelier:${atelier}`);
+      if (!ATELIERS.includes(atelier)) return res.status(400).json({ erreur: "Atelier inconnu (P, A, B, C, D ou QUIZ)." });
+      const r = Redis.fromEnv();
+      await r.del(`atelier:${atelier}`);
+      const photos = await r.smembers(`photos:${atelier}`);
+      if (photos && photos.length) await r.del(...photos, `photos:${atelier}`);
       return res.status(200).json({ ok: true, message: `Réponses de l'atelier ${atelier} effacées.` });
     }
     return res.status(400).json({ erreur: "Action inconnue : exporter ou vider." });

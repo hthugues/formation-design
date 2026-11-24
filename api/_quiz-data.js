@@ -1,51 +1,34 @@
 // Questions du quiz final (identiques à celles de la présentation).
 // Le fichier commence par _ : Vercel ne le publie pas comme une fonction.
 export const QUESTIONS = [
-  {
-    theme: "Identité",
-    question: "Quelle est la différence entre un logo et une identité visuelle ?",
-    options: [
-      "Il n’y en a pas, ce sont des synonymes",
-      "Le logo est un élément de l’identité visuelle, qui comprend aussi couleurs, polices, images et ton",
-      "L’identité visuelle ne concerne que le site web"
-    ],
-    answer: 2,
-    explanation: "Le logo est la signature ; l’identité visuelle est la tenue complète."
-  },
-  {
-    theme: "Identité",
-    question: "Selon la règle 60-30-10, à quoi servent les 10 % ?",
+  { theme: "Identité", question: "Quelle est la différence entre un logo et une identité visuelle ?",
+    options: ["Il n’y en a pas, ce sont des synonymes", "Le logo est un élément de l’identité visuelle, qui comprend aussi couleurs, polices, images et ton", "L’identité visuelle ne concerne que le site web"],
+    answer: 2, explanation: "Le logo est la signature ; l’identité visuelle est la tenue complète." },
+  { theme: "Identité", question: "Que faut-il dans une phrase de positionnement pour qu’elle ne soit pas un simple slogan ?",
+    options: ["Une preuve vérifiable", "Un jeu de mots", "Le nom du fondateur"],
+    answer: 1, explanation: "Sans preuve, c’est un slogan. Avec une preuve, c’est une promesse." },
+  { theme: "Identité", question: "Pourquoi noter le code HEX de vos couleurs ?",
+    options: ["Pour que la couleur soit plus vive", "Ce n’est utile que pour l’impression", "Pour retrouver exactement la même couleur sur tous les supports"],
+    answer: 3, explanation: "Sans code, la couleur change d’un support à l’autre et la marque perd sa cohérence." },
+  { theme: "Identité", question: "Selon la règle 60-30-10, à quoi servent les 10 % ?",
     options: ["À la couleur d’accent, pour attirer l’œil sur l’essentiel", "Au fond de page", "Aux textes longs"],
-    answer: 1,
-    explanation: "60 % de neutre, 30 % de couleur principale, 10 % d’accent."
-  },
-  {
-    theme: "Digital",
-    question: "Vous démarrez avec peu de temps. Quelle stratégie de canaux choisir ?",
-    options: [
-      "Être présent sur tous les réseaux pour toucher un maximum de monde",
-      "Choisir 2 canaux où se trouve votre cible, et les tenir régulièrement",
-      "Attendre d’avoir un site web professionnel"
-    ],
-    answer: 2,
-    explanation: "2 canaux bien tenus valent mieux que 6 abandonnés ; la régularité construit la confiance."
-  },
-  {
-    theme: "Digital",
-    question: "Selon la règle 80/20, que doivent être la majorité de vos publications ?",
+    answer: 1, explanation: "60 % de neutre, 30 % de couleur principale, 10 % d’accent." },
+  { theme: "Identité", question: "Combien de familles de polices une petite marque devrait-elle utiliser ?",
+    options: ["Une différente pour chaque support", "2 au maximum : une pour les titres, une pour le texte", "Autant qu’on veut, si elles sont gratuites"],
+    answer: 2, explanation: "Au-delà de deux, la marque perd en lisibilité et en cohérence." },
+  { theme: "Digital", question: "Vous démarrez avec peu de temps. Quelle stratégie de canaux choisir ?",
+    options: ["Être présent sur tous les réseaux pour toucher un maximum de monde", "Choisir 2 canaux où se trouve votre cible, et les tenir régulièrement", "Attendre d’avoir un site web professionnel"],
+    answer: 2, explanation: "2 canaux bien tenus valent mieux que 6 abandonnés ; la régularité construit la confiance." },
+  { theme: "Digital", question: "Selon la règle 80/20, que doivent être la majorité de vos publications ?",
     options: ["Des offres et des promotions", "Des contenus utiles, inspirants ou divertissants", "Des photos de votre logo"],
-    answer: 2,
-    explanation: "80 % de valeur, 20 % de vente : une page qui ne fait que vendre perd son public."
-  },
-  {
-    theme: "Digital",
-    question: "Quand faut-il payer pour booster une publication ?",
-    options: [
-      "Dès la création de la page, pour avoir des abonnés",
-      "Pour chaque publication, sans exception",
-      "Quand une publication a déjà bien fonctionné gratuitement, avec un objectif et un budget fixés"
-    ],
-    answer: 3,
-    explanation: "La publicité amplifie ce qui marche déjà ; elle ne répare pas un contenu faible."
-  }
+    answer: 2, explanation: "80 % de valeur, 20 % de vente : une page qui ne fait que vendre perd son public." },
+  { theme: "Digital", question: "Que doit-on trouver dans les 3 premières secondes d’une vidéo courte ?",
+    options: ["Le logo en grand", "Les coordonnées complètes", "Une accroche qui donne envie de rester"],
+    answer: 3, explanation: "Tout se joue dans les 3 premières secondes : sans accroche, on passe à la vidéo suivante." },
+  { theme: "Digital", question: "Quand faut-il payer pour booster une publication ?",
+    options: ["Dès la création de la page, pour avoir des abonnés", "Pour chaque publication, sans exception", "Quand une publication a déjà bien fonctionné gratuitement, avec un objectif et un budget fixés"],
+    answer: 3, explanation: "La publicité amplifie ce qui marche déjà ; elle ne répare pas un contenu faible." },
+  { theme: "Digital", question: "Quel chiffre est le plus important à suivre pour une petite structure ?",
+    options: ["Le nombre de contacts : messages, appels", "Le nombre de « j’aime »", "Le nombre d’abonnés"],
+    answer: 1, explanation: "Les contacts mènent à la vente : c’est le chiffre qui compte le plus." }
 ];

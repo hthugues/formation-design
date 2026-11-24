@@ -51,7 +51,21 @@
   /* Résultats */
   .res { display: grid; grid-template-columns: 2fr 1fr; gap: 48px; margin-top: 24px; align-items: start; }
   .qgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .qres { background: var(--blanc); border-radius: 8px; padding: 14px 18px; }
+  .zoom-btn { float: right; background: var(--blanc); color: var(--lagon); border: 1.5px solid var(--lagon); border-radius: 20px; font: inherit; font-size: 12px; font-weight: 700; padding: 3px 10px; cursor: pointer; margin-left: 8px; }
+  .modal { position: fixed; inset: 0; z-index: 50; background: rgba(10,54,66,.8); display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .modal .box { background: var(--sable); border-radius: 14px; width: min(1100px, 100%); max-height: 100%; overflow-y: auto; padding: 28px 36px; }
+  .modal .nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; }
+  .modal .nav button { background: var(--lagon); color: #fff; border: none; border-radius: 30px; padding: 10px 18px; font: inherit; font-weight: 700; cursor: pointer; }
+  .modal h2 { font-size: 38px; line-height: 1.2; margin-bottom: 20px; }
+  .modal .bar { font-size: 22px; grid-template-columns: 40px 1fr 110px; margin-top: 14px; }
+  .modal .bar .track { height: 38px; }
+  .modal .opt-l { font-size: 20px; margin: 18px 0 2px; color: var(--ink); }
+  .modal .opt-l.good { font-weight: 700; color: var(--lagon); }
+  .modal .expl { font-size: 22px; margin-top: 22px; background: var(--blanc); border-left: 5px solid var(--ocre); padding: 14px 18px; color: var(--ink); }
+  .qres { background: var(--blanc); border-radius: 8px; padding: 12px 16px; }
+  .qgrid .qres .qt { font-size: 16px; }
+  .qgrid .bar { margin-top: 4px; font-size: 14px; }
+  .qgrid .bar .track { height: 16px; }
   .qres .qt { font-weight: 700; font-size: 19px; color: var(--lagon); }
   .bar { display: grid; grid-template-columns: 30px 1fr 84px; gap: 10px; align-items: center; margin-top: 8px; font-size: 17px; }
   .bar .track { background: var(--gres); border-radius: 6px; height: 26px; overflow: hidden; }
@@ -110,7 +124,8 @@ function heure() { return new Date().toLocaleTimeString("fr-FR", { hour: "2-digi
 
 /* ---------- participant ---------- */
 function participant(root) {
-  entete(root, "Quiz éclair", "5 questions, une seule bonne réponse à chaque fois. Votre score s’affiche juste après.");
+  var b = el("a", null, "← Tous les ateliers"); b.href = location.origin + "/ateliers"; b.style.cssText = "display:inline-block;color:var(--lagon);font-weight:600;text-decoration:none;font-size:15px;margin-bottom:14px"; root.appendChild(b);
+  entete(root, "Quiz éclair", "10 questions, une seule bonne réponse à chaque fois. Votre score s’affiche juste après.");
   var zone = el("div"); root.appendChild(zone);
   Promise.all([api("?questions=1"), api("?jeton=" + jeton())]).then(function (r) {
     var questions = r[0], etat = r[1];
@@ -153,7 +168,7 @@ function formulaire(zone, questions, avant) {
 function resultat(zone, questions, score, corrections, choix) {
   zone.textContent = "";
   var s = el("div", "score");
-  add(s, el("div", "big", score + " / " + questions.length), el("div", null, score === questions.length ? "Parfait !" : score >= 3 ? "Bravo, c’est bien retenu." : "Bon début : relisez les explications."));
+  add(s, el("div", "big", score + " / " + questions.length), el("div", null, score === questions.length ? "Parfait !" : score >= Math.ceil(questions.length * 0.6) ? "Bravo, c’est bien retenu." : "Bon début : relisez les explications."));
   zone.appendChild(s);
   questions.forEach(function (q, i) {
     var c = corrections[i] || {}, b = el("div", "card corr" + (c.juste ? "" : " faux"));
@@ -188,6 +203,30 @@ function projection(root) {
   charger(); setInterval(charger, 4000);
 }
 
+var ZQ = null;
+function zoomQuestion(e, i) {
+  if (ZQ) ZQ.remove();
+  var m = el("div", "modal"), box = el("div", "box"), nav = el("div", "nav"), prev = el("button", null, "← Précédente"), pos = el("span"), next = el("button", null, "Suivante →"), close = el("button", null, "Fermer ✕"), zone = el("div");
+  function montrer() {
+    var q = e.questions[i], st = e.stats[i], tot = st.reduce(function (a, b) { return a + b; }, 0);
+    zone.textContent = ""; pos.textContent = "Question " + (i + 1) + " / " + e.questions.length;
+    zone.appendChild(el("h2", null, q.question));
+    q.options.forEach(function (o, j) {
+      var good = q.answer === j + 1, pct = tot ? Math.round(st[j] / tot * 100) : 0;
+      zone.appendChild(el("div", "opt-l" + (good ? " good" : ""), (j + 1) + ". " + o + (good ? "  ✓" : "")));
+      var row = el("div", "bar" + (good ? " good" : "")), tr = el("div", "track"), f = el("div", "fill"); f.style.width = pct + "%"; tr.appendChild(f);
+      add(row, el("span", "k", String(j + 1)), tr, el("span", "p", pct + " % (" + st[j] + ")")); zone.appendChild(row);
+    });
+    zone.appendChild(el("div", "expl", q.explanation));
+    prev.style.opacity = i === 0 ? ".35" : "1"; next.style.opacity = i === e.questions.length - 1 ? ".35" : "1";
+  }
+  prev.onclick = function () { if (i > 0) { i--; montrer(); } };
+  next.onclick = function () { if (i < e.questions.length - 1) { i++; montrer(); } };
+  close.onclick = function () { m.remove(); ZQ = null; };
+  m.onclick = function (ev) { if (ev.target === m) close.onclick(); };
+  add(nav, prev, pos, next, close); add(box, nav, zone); m.appendChild(box); document.body.appendChild(m); ZQ = m; montrer();
+}
+
 /* ---------- résultats ---------- */
 function resultats(root) {
   root.className = "wrap large";
@@ -195,10 +234,13 @@ function resultats(root) {
   var g = el("div", "res"), gauche = el("div", "qgrid"), droite = el("div", "podium"), live = el("div", "live");
   add(g, gauche, droite); add(root, g, live);
   function charger() {
+    if (ZQ) return;
     api("?resultats=1").then(function (e) {
       gauche.textContent = ""; droite.textContent = "";
       (e.questions || []).forEach(function (q, i) {
         var box = el("div", "qres"), tot = e.stats[i].reduce(function (a, b) { return a + b; }, 0);
+        var zb = el("button", "zoom-btn", "Agrandir"); zb.onclick = (function (k) { return function () { zoomQuestion(e, k); }; })(i);
+        box.appendChild(zb);
         box.appendChild(el("div", "qt", (i + 1) + ". " + q.question));
         e.stats[i].forEach(function (v, j) {
           var pct = tot ? Math.round(v / tot * 100) : 0, row = el("div", "bar" + (q.answer === j + 1 ? " good" : ""));
@@ -212,7 +254,7 @@ function resultats(root) {
       droite.appendChild(el("h2", null, "Classement"));
       if (!e.participants.length) droite.appendChild(el("div", "empty", "En attente des premières réponses…"));
       e.participants.slice(0, 12).forEach(function (p, i) {
-        var r = el("div", "rank"); add(r, el("span", "r", String(i + 1)), el("span", null, p.nom), el("span", "s", p.score + " / 5")); droite.appendChild(r);
+        var r = el("div", "rank"); add(r, el("span", "r", String(i + 1)), el("span", null, p.nom), el("span", "s", p.score + " / " + (e.questions || []).length)); droite.appendChild(r);
       });
       if (e.participants.length > 12) droite.appendChild(el("div", "live", "+ " + (e.participants.length - 12) + " autres participants"));
       live.textContent = e.total + " participants · bonne réponse en bleu foncé · mis à jour à " + heure();
@@ -224,6 +266,12 @@ function resultats(root) {
 function agrandir() { document.documentElement.style.zoom = Math.max(1, Math.min(MODE === "resultats" ? 1.4 : 2.2, window.innerWidth / (MODE === "resultats" ? 1400 : 1150))); }
 
 /* Dans la présentation (iframe) : les flèches et l'espace restent à la présentation. */
+document.addEventListener("keydown", function (ev) {
+  if (!ZQ) return;
+  var b = ZQ.querySelectorAll(".nav button");
+  if (ev.key === "Escape") b[2].click(); else if (ev.key === "ArrowLeft") b[0].click(); else if (ev.key === "ArrowRight") b[1].click(); else return;
+  ev.preventDefault(); ev.stopImmediatePropagation();
+}, true);
 if (window.parent !== window) {
   document.addEventListener("keydown", function (ev) {
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(ev.target.tagName)) return;
@@ -233,6 +281,7 @@ if (window.parent !== window) {
 
 (function () {
   var root = document.getElementById("app");
+  var PARTICIPANT_LIEN = location.origin + "/ateliers";
   if (MODE !== "participant") { agrandir(); window.addEventListener("resize", agrandir); }
   if (MODE === "projection") projection(root); else if (MODE === "resultats") resultats(root); else participant(root);
 })();
