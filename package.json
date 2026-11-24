@@ -1,0 +1,9 @@
+{
+  "name": "formation-identite-visuelle-marketing-digital",
+  "private": true,
+  "type": "module",
+  "description": "Présentation interactive et ateliers en ligne - Formation B-Lossom Center, 24/11/2026",
+  "dependencies": {
+    "@upstash/redis": "^1.41.0"
+  }
+}
